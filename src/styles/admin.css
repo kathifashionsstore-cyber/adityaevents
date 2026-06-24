@@ -1,0 +1,69 @@
+/* src/styles/admin.css */
+.admin-sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: #111111;
+  border-right: 1px solid rgba(212, 175, 55, 0.15);
+  color: #ffffff;
+  z-index: 100;
+  transition: var(--transition);
+}
+
+.admin-main {
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+  background: var(--bg-primary);
+  transition: var(--transition);
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .admin-sidebar {
+    transform: translateX(-100%);
+  }
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+  .admin-main {
+    margin-left: 0;
+    padding: 1rem;
+  }
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  text-align: left;
+  padding: 1rem;
+  font-weight: 600;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.admin-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.admin-table tr:hover {
+  background: rgba(212, 175, 55, 0.04);
+}
+
+.admin-card-stat {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+}

@@ -1,0 +1,37 @@
+{
+  "short_name": "Adithya Events",
+  "name": "Adithya Event Management",
+  "icons": [
+    {
+      "src": "logo.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "logo.webp",
+      "sizes": "512x512",
+      "type": "image/webp"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#2D1B4E",
+  "background_color": "#1C0A2E",
+  "shortcuts": [
+    {
+      "name": "Book Event",
+      "short_name": "Book",
+      "description": "Book a new event with Adithya Events",
+      "url": "/#booking",
+      "icons": [{ "src": "logo.webp", "sizes": "192x192", "type": "image/webp" }]
+    },
+    {
+      "name": "Contact Us",
+      "short_name": "Contact",
+      "description": "Contact our team",
+      "url": "/#contact",
+      "icons": [{ "src": "logo.webp", "sizes": "192x192", "type": "image/webp" }]
+    }
+  ]
+}

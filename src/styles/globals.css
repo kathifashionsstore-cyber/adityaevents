@@ -1,0 +1,101 @@
+/* src/styles/globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Poppins:wght@300;400;500;600;700&family=Great+Vibes&family=JetBrains+Mono:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './variables.css';
+@import './animations.css';
+@import './glassmorphism.css';
+@import './typography.css';
+@import './components.css';
+@import './admin.css';
+
+:root {
+  /* Let variables.css define core values, we bind overrides and font definitions here */
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Poppins', sans-serif;
+  --font-accent: 'Great Vibes', cursive;
+  --font-mono: 'JetBrains Mono', monospace;
+  --border-radius: 12px;
+  --border-radius-lg: 20px;
+  --border-radius-xl: 32px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: var(--bg-dark-section);    /* Deep Amethyst #2D1B4E */
+  --bg-secondary: var(--bg-hero);          /* Deep Velvet Purple #1C0A2E */
+  --bg-card: var(--bg-card-dark);          /* Deep Purple Card #3A1F5C */
+  --text-primary: var(--champagne);        /* Soft Champagne */
+  --text-secondary: var(--rose-gold);      /* Rose Gold */
+  --border-color: rgba(212, 175, 55, 0.2);
+}
+
+[data-theme="light"] {
+  --bg-primary: var(--bg-light);           /* Warm Ivory #FDF8F0 */
+  --bg-secondary: var(--bg-warm);           /* Warm Cream #FFF9F0 */
+  --bg-card: var(--bg-card-light);         /* Pure White */
+  --text-primary: var(--text-on-light);    /* Deep Purple */
+  --text-secondary: var(--text-muted);     /* Muted Purple-Grey */
+  --border-color: rgba(212, 175, 55, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::selection {
+  background: var(--gold);
+  color: #000000;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--charcoal);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--rich-gold);
+}
+
+/* Smooth page transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+.page-exit {
+  opacity: 1;
+}
+.page-exit-active {
+  opacity: 0;
+  transition: opacity 300ms ease;
+}

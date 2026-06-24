@@ -1,0 +1,104 @@
+/* src/styles/components.css */
+.btn-premium {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-family: var(--font-body);
+  font-weight: 600;
+  transition: var(--transition-bounce);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+}
+
+.btn-premium::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.5s ease-out;
+}
+
+.btn-premium:active::after {
+  transform: translate(-50%, -50%) scale(1);
+  transition: 0s;
+}
+
+.btn-gold {
+  background: var(--gradient-gold);
+  color: #1C0A2E; /* Velvet purple on gold buttons */
+  box-shadow: var(--shadow-gold-sm);
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gold-lg);
+  opacity: 0.95;
+  color: #1C0A2E;
+}
+
+.btn-outline-gold {
+  background: transparent;
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+.btn-outline-gold:hover {
+  background: var(--gradient-gold);
+  color: #1C0A2E;
+  box-shadow: var(--shadow-gold-md);
+  transform: translateY(-2px);
+}
+
+.btn-purple-glow {
+  background: var(--bg-hero);
+  color: var(--champagne);
+  border: 1px solid var(--gold);
+  box-shadow: 0 0 12px var(--shadow-purple);
+}
+
+.btn-purple-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(107, 47, 160, 0.4), var(--shadow-gold-sm);
+  color: var(--champagne);
+}
+
+.card-premium {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+}
+
+.card-premium:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--gold);
+}
+
+.input-premium {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  transition: var(--transition);
+}
+
+.input-premium:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}

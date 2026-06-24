@@ -1,0 +1,52 @@
+// src/components/admin/DashboardCards.jsx
+import React from 'react';
+import { IndianRupee, Users, ClipboardCheck, AlertCircle } from 'lucide-react';
+import { formatCurrency } from '../../utils/formatters';
+
+const DashboardCards = ({ stats }) => {
+  const cards = [
+    {
+      title: 'Total Revenue Collected',
+      value: formatCurrency(stats?.totalRevenue || 0),
+      icon: <IndianRupee className="w-5 h-5 text-gold" />,
+      desc: 'Sum of all processed payments'
+    },
+    {
+      title: 'Active Bookings',
+      value: stats?.activeBookings || 0,
+      icon: <ClipboardCheck className="w-5 h-5 text-gold" />,
+      desc: 'Confirmed slot listings'
+    },
+    {
+      title: 'CRM Lead Enquiries',
+      value: stats?.totalLeads || 0,
+      icon: <Users className="w-5 h-5 text-gold" />,
+      desc: 'Contacts requests archived'
+    },
+    {
+      title: 'Operating Expenses',
+      value: formatCurrency(stats?.totalExpenses || 0),
+      icon: <AlertCircle className="w-5 h-5 text-gold" />,
+      desc: 'Logged decorator and staff payouts'
+    }
+  ];
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {cards.map((c, i) => (
+        <div key={i} className="admin-card-stat p-6 flex items-center justify-between">
+          <div className="space-y-1 text-left">
+            <span className="font-body text-[10px] text-champagne/50 uppercase tracking-widest block font-semibold">{c.title}</span>
+            <span className="font-display text-2xl font-extrabold text-champagne block">{c.value}</span>
+            <span className="font-body text-[10px] text-champagne/45 block">{c.desc}</span>
+          </div>
+          <div className="p-3 bg-white/5 border border-gold/15 rounded-lg shrink-0 ml-4">
+            {c.icon}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default DashboardCards;

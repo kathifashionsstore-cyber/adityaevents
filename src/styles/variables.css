@@ -1,0 +1,71 @@
+/* src/styles/variables.css */
+:root {
+  --header-height: 80px;
+  --sidebar-width: 260px;
+  --max-width: 1280px;
+  
+  /* PRIMARY — Royal Gold Tones */
+  --gold:           #D4AF37;   /* Royal Gold */
+  --deep-gold:      #B8860B;   /* Dark Goldenrod */
+  --rich-gold:      #FFD700;   /* Pure Gold */
+  --champagne:      #F7E7CE;   /* Soft Champagne */
+  --rose-gold:      #E8B4A0;   /* Rose Gold */
+
+  /* BACKGROUNDS — Warm, Inviting, NOT Black */
+  --bg-hero:        #1C0A2E;   /* Deep Velvet Purple (NOT black) */
+  --bg-dark-section:#2D1B4E;   /* Dark Amethyst */
+  --bg-mid:         #3D2464;   /* Royal Purple */
+  --bg-light:       #FDF8F0;   /* Warm Ivory */
+  --bg-card-light:  #FFFFFF;   /* Pure White */
+  --bg-card-dark:   #3A1F5C;   /* Deep Purple Card */
+  --bg-warm:        #FFF9F0;   /* Warm Cream */
+
+  /* ACCENTS */
+  --burgundy:       #722F37;   /* Deep Burgundy */
+  --coral:          #FF6B6B;   /* Coral (error states) */
+  --emerald:        #2ECC71;   /* Success Green */
+  --teal:           #1ABC9C;   /* Teal Accent */
+  --sapphire:       #3498DB;   /* Sapphire Blue */
+  --ivory:          #FFFFF0;   /* Ivory White */
+  --warm-white:     #FDF8F0;   /* Warm Background */
+
+  /* GRADIENTS */
+  --gradient-hero:       linear-gradient(135deg, #1C0A2E 0%, #3D2464 50%, #6B2FA0 100%);
+  --gradient-gold:       linear-gradient(135deg, #D4AF37 0%, #FFD700 50%, #B8860B 100%);
+  --gradient-purple-gold: linear-gradient(135deg, #3D2464 0%, #6B2FA0 40%, #D4AF37 100%);
+  --gradient-warm:       linear-gradient(135deg, #FFF9F0 0%, #F7E7CE 100%);
+  --gradient-section-dark: linear-gradient(180deg, #2D1B4E 0%, #1C0A2E 100%);
+  --gradient-card:       linear-gradient(145deg, rgba(212,175,55,0.1) 0%, rgba(107,47,160,0.1) 100%);
+
+  /* TEXT COLORS */
+  --text-on-dark:   #F7E7CE;   /* Champagne on dark backgrounds */
+  --text-on-light:  #2C1B4E;   /* Deep purple on light backgrounds */
+  --text-gold:      #D4AF37;   /* Gold for headings */
+  --text-muted:     #9E8BBB;   /* Muted purple-grey */
+
+  /* SHADOWS */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  --shadow-gold-sm: 0 2px 8px rgba(212, 175, 55, 0.15);
+  --shadow-gold-md: 0 4px 12px rgba(212, 175, 55, 0.25);
+  --shadow-gold-lg: 0 10px 25px rgba(212, 175, 55, 0.35);
+  --shadow-gold:    rgba(212, 175, 55, 0.35);
+  --shadow-purple:  rgba(107, 47, 160, 0.25);
+  
+  /* GLASSMORPHISM */
+  --glass-bg-dark:  rgba(61, 36, 100, 0.4);
+  --glass-bg-light: rgba(255, 255, 255, 0.75);
+  --glass-border:   rgba(212, 175, 55, 0.25);
+  --glass-bg:       rgba(255, 255, 255, 0.08);
+
+  --z-back: -10;
+  --z-normal: 1;
+  --z-dropdown: 50;
+  --z-header: 100;
+  --z-modal: 500;
+  --z-toast: 1000;
+  --z-loading: 9999;
+}
