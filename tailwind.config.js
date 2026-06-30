@@ -1,4 +1,15 @@
 /** @type {import('tailwindcss').Config} */
+
+// Helper to support opacity modifiers with hex CSS variables via CSS color-mix
+const withOpacity = (variableName) => {
+  return ({ opacityValue }) => {
+    if (opacityValue !== undefined) {
+      return `color-mix(in srgb, ${variableName} calc(${opacityValue} * 100%), transparent)`;
+    }
+    return variableName;
+  };
+};
+
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -8,29 +19,33 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primaryRose: 'var(--primary-rose)',
-        secondaryRoseGold: 'var(--secondary-rose-gold)',
-        accentGold: 'var(--accent-gold)',
-        darkSection: 'var(--dark-section)',
-        textPrimary: 'var(--text-primary)',
-        textSecondary: 'var(--text-secondary)',
+        primaryRose: withOpacity('var(--primary-rose)'),
+        secondaryRoseGold: withOpacity('var(--secondary-rose-gold)'),
+        accentGold: withOpacity('var(--accent-gold)'),
+        darkSection: withOpacity('var(--dark-section)'),
+        textPrimary: withOpacity('var(--text-primary)'),
+        textSecondary: withOpacity('var(--text-secondary)'),
+        surface: withOpacity('var(--surface)'),
+        background: withOpacity('var(--background)'),
+        charcoal: withOpacity('var(--dark-section)'),
+        champagne: withOpacity('var(--secondary-rose-gold)'),
         gold: {
-          DEFAULT: 'var(--accent-gold)',
-          deep: 'var(--primary-rose)',
-          rich: 'var(--secondary-rose-gold)',
-          champagne: 'var(--secondary-rose-gold)',
-          rose: 'var(--secondary-rose-gold)',
+          DEFAULT: withOpacity('var(--accent-gold)'),
+          deep: withOpacity('var(--primary-rose)'),
+          rich: withOpacity('var(--secondary-rose-gold)'),
+          champagne: withOpacity('var(--secondary-rose-gold)'),
+          rose: withOpacity('var(--secondary-rose-gold)'),
         },
-        burgundy: 'var(--primary-rose)',
-        ivory: 'var(--background)',
-        success: 'var(--success)',
-        danger: '#E74C3C',
-        velvet: 'var(--dark-section)',
-        amethyst: 'var(--primary-rose)',
-        royal: 'var(--secondary-rose-gold)',
-        cream: 'var(--background)',
-        ivoryWarm: 'var(--background)',
-        cardDark: 'var(--surface)',
+        burgundy: withOpacity('var(--primary-rose)'),
+        ivory: withOpacity('var(--background)'),
+        success: withOpacity('var(--success)'),
+        danger: withOpacity('#E74C3C'),
+        velvet: withOpacity('var(--dark-section)'),
+        amethyst: withOpacity('var(--primary-rose)'),
+        royal: withOpacity('var(--secondary-rose-gold)'),
+        cream: withOpacity('var(--background)'),
+        ivoryWarm: withOpacity('var(--background)'),
+        cardDark: withOpacity('var(--surface)'),
       },
       fontFamily: {
         display: ['"Playfair Display"', 'serif'],

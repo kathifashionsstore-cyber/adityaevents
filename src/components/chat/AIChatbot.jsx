@@ -2,16 +2,25 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
-import { MessageSquare, X, Send, Bot, User } from 'lucide-react';
-import { BUSINESS_DETAILS } from '../../utils/constants';
+import { X, Send, Bot } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const AIChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleToggle = () => setIsOpen(prev => !prev);
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    
+    handleResize();
     window.addEventListener('toggle-chatbot', handleToggle);
-    return () => window.removeEventListener('toggle-chatbot', handleToggle);
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('toggle-chatbot', handleToggle);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const [messages, setMessages] = useState([
@@ -113,48 +122,45 @@ const AIChatbot = () => {
     }, 1200);
   };
 
-  return (
-    <div className="fixed bottom-6 left-6 z-[490]">
-      {/* Floating button */}
-      {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="w-12 h-12 rounded-full bg-burgundy border border-gold/30 text-gold flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300 cursor-pointer"
-          aria-label="Ask assistant"
-        >
-          <MessageSquare className="w-5 h-5 animate-pulse" />
-        </button>
-      )}
+  const mobileBottomOffset = 'calc(104px + env(safe-area-inset-bottom))';
+  const desktopBottomOffset = '96px';
 
-      {/* Expanded chat drawer panel */}
+  return (
+    <AnimatePresence>
       {isOpen && (
-        <div className="w-[310px] sm:w-[350px] h-[450px] bg-charcoal border border-gold/15 rounded-xl shadow-2xl overflow-hidden flex flex-col animate-scaleIn">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          style={{ bottom: isMobile ? mobileBottomOffset : desktopBottomOffset }}
+          className="fixed right-6 z-[490] w-[310px] sm:w-[350px] h-[450px] bg-surface border border-border-soft rounded-xl shadow-2xl overflow-hidden flex flex-col"
+        >
           {/* Header */}
-          <div className="bg-charcoal border-b border-gold/10 p-4 flex items-center justify-between">
+          <div className="bg-darkSection border-b border-border-soft p-4 flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <Bot className="w-5 h-5 text-gold" />
-              <span className="font-display text-sm font-bold text-champagne">Adithya Assistant</span>
+              <Bot className="w-5 h-5 text-secondaryRoseGold" />
+              <span className="font-display text-sm font-bold text-white">Adithya Assistant</span>
             </div>
-            <button onClick={() => setIsOpen(false)} className="text-champagne/70 hover:text-gold p-1 cursor-pointer">
+            <button onClick={() => setIsOpen(false)} className="text-white/70 hover:text-white p-1 cursor-pointer">
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Messages list body */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-charcoal/20">
+          <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-background/30">
             {messages.map((m) => {
               const isBot = m.sender === 'bot';
               return (
                 <div key={m.id} className={`flex items-start ${isBot ? 'justify-start' : 'justify-end'}`}>
                   {isBot && (
-                    <div className="w-6 h-6 rounded-full border border-gold/20 flex items-center justify-center bg-white/5 mr-2 shrink-0">
-                      <Bot className="w-3.5 h-3.5 text-gold" />
+                    <div className="w-6 h-6 rounded-full border border-border-soft flex items-center justify-center bg-white/5 mr-2 shrink-0">
+                      <Bot className="w-3.5 h-3.5 text-primaryRose" />
                     </div>
                   )}
                   <div className={`p-3 rounded-lg text-xs max-w-[80%] font-body whitespace-pre-line leading-relaxed ${
                     isBot 
-                      ? 'bg-white/5 border border-white/5 text-champagne/90' 
-                      : 'bg-gold/10 border border-gold/20 text-gold'
+                      ? 'bg-surface border border-border-soft text-textPrimary shadow-sm' 
+                      : 'bg-primaryRose border border-border-soft text-white'
                   }`}>
                     {m.text}
                   </div>
@@ -164,10 +170,10 @@ const AIChatbot = () => {
 
             {isTyping && (
               <div className="flex items-start">
-                <div className="w-6 h-6 rounded-full border border-gold/20 flex items-center justify-center bg-white/5 mr-2 shrink-0">
-                  <Bot className="w-3.5 h-3.5 text-gold animate-bounce" />
+                <div className="w-6 h-6 rounded-full border border-border-soft flex items-center justify-center bg-white/5 mr-2 shrink-0">
+                  <Bot className="w-3.5 h-3.5 text-primaryRose animate-bounce" />
                 </div>
-                <div className="bg-white/5 p-3 rounded-lg text-[10px] text-champagne/50">
+                <div className="bg-surface/50 p-3 rounded-lg text-[10px] text-textSecondary">
                   Assistant is typing...
                 </div>
               </div>
@@ -176,21 +182,21 @@ const AIChatbot = () => {
           </div>
 
           {/* Form input bar */}
-          <form onSubmit={handleSendMessage} className="p-3 border-t border-gold/10 flex items-center space-x-2 bg-charcoal/40">
+          <form onSubmit={handleSendMessage} className="p-3 border-t border-border-soft flex items-center space-x-2 bg-surface/50">
             <input
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Ask about stages, food, catering estimates..."
-              className="flex-1 bg-white/5 border border-white/10 rounded-lg p-2 text-xs text-champagne focus:outline-none focus:border-gold/30"
+              className="flex-1 bg-background border border-border-soft rounded-lg p-2 text-xs text-textPrimary focus:outline-none focus:border-primaryRose/50"
             />
-            <button type="submit" className="p-2 bg-gold text-charcoal rounded-lg hover:scale-105 transition-transform cursor-pointer">
+            <button type="submit" className="p-2 bg-primaryRose text-white rounded-lg hover:scale-105 transition-transform cursor-pointer">
               <Send className="w-3.5 h-3.5" />
             </button>
           </form>
-        </div>
+        </motion.div>
       )}
-    </div>
+    </AnimatePresence>
   );
 };
 

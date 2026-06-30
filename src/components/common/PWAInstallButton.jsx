@@ -74,10 +74,10 @@ const PWAInstallButton = () => {
       <AnimatePresence>
         {showPill && (
           <motion.div
-            initial={{ y: 80, opacity: 0, scale: 0.9 }}
+            initial={{ y: -80, opacity: 0, scale: 0.9 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: 80, opacity: 0, scale: 0.9 }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[480] md:left-6 md:translate-x-0 select-none"
+            exit={{ y: -80, opacity: 0, scale: 0.9 }}
+            className="fixed top-[88px] right-6 z-[480] md:bottom-6 md:left-6 md:top-auto md:right-auto md:translate-x-0 select-none max-md:left-auto max-md:translate-x-0"
           >
             <div
               onClick={handleInstallClick}

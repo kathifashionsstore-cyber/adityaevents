@@ -1,18 +1,28 @@
 // src/components/common/FloatingButtons.jsx
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Phone, MessageSquare, MessageCircle, X, ChevronUp } from 'lucide-react';
+import { Phone, MessageSquare, ChevronUp } from 'lucide-react';
 
 const FloatingButtons = () => {
   const [showScroll, setShowScroll] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const checkScroll = () => {
       setShowScroll(window.scrollY > 300);
     };
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    handleResize();
     window.addEventListener('scroll', checkScroll);
-    return () => window.removeEventListener('scroll', checkScroll);
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('scroll', checkScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const scrollToTop = () => {
@@ -21,50 +31,39 @@ const FloatingButtons = () => {
 
   const triggerChatbot = () => {
     window.dispatchEvent(new CustomEvent('toggle-chatbot'));
-    setExpanded(false);
   };
 
-  const subButtons = [
-    {
-      id: 'whatsapp',
-      label: 'WhatsApp Chat',
-      icon: <MessageCircle className="w-5 h-5" />,
-      color: 'bg-green-600 border border-green-500/20 text-white',
-      onClick: () => {
-        const welcomeMessage = "Hello Adithya Event Management! I am interested in inquiring about event decor and catering packages.";
-        window.open(`https://wa.me/919393217676?text=${encodeURIComponent(welcomeMessage)}`, '_blank');
-        setExpanded(false);
-      }
-    },
-    {
-      id: 'call',
-      label: 'Call Coordinator',
-      icon: <Phone className="w-5 h-5" />,
-      color: 'bg-blue-600 border border-blue-500/20 text-white',
-      onClick: () => {
-        window.open('tel:+919393217676', '_self');
-        setExpanded(false);
-      }
-    },
-    {
-      id: 'chatbot',
-      label: 'AI Event Assistant',
-      icon: <MessageSquare className="w-5 h-5" />,
-      color: 'bg-purple-600 border border-purple-500/20 text-white',
-      onClick: triggerChatbot
-    }
-  ];
+  // Official WhatsApp SVG icon
+  const WhatsAppIcon = () => (
+    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.725 1.451 5.486.002 9.965-4.47 9.969-9.948.002-2.654-1.03-5.15-2.906-7.028-1.878-1.878-4.377-2.91-7.037-2.913-5.499 0-9.978 4.475-9.982 9.953-.002 2.035.533 4.022 1.547 5.765L1.13 21.077l4.58-1.2c1.65.9 3.23 1.277 4.7 1.277h.003zM17.47 14.397c-.3-.149-1.777-.878-2.031-.971-.253-.093-.438-.14-.62.149-.182.289-.707.878-.867 1.058-.16.18-.32.2-.62.051-.3-.149-1.264-.467-2.409-1.488-.89-.793-1.49-1.77-1.665-2.07-.175-.3-.019-.461.13-.609.135-.133.3-.349.45-.523.15-.174.2-.299.3-.499.1-.2.05-.375-.025-.524-.075-.15-.62-1.492-.85-2.046-.224-.539-.452-.465-.62-.474-.16-.007-.343-.009-.528-.009-.185 0-.485.07-.74.349-.253.28-1.026 1.002-1.026 2.443 0 1.44 1.049 2.832 1.197 3.029.15.197 2.065 3.152 5.003 4.429.7.304 1.246.486 1.672.622.705.224 1.346.193 1.854.117.564-.085 1.777-.726 2.027-1.427.25-.701.25-1.3.175-1.427-.075-.127-.275-.2-.575-.349z"/>
+    </svg>
+  );
+
+  // Spacing offsets for mobile BottomNav/iOS Safe Areas
+  const mobileBottomOffset = 'calc(96px + env(safe-area-inset-bottom))';
+  const desktopBottomOffset = '32px';
+
+  const positionStyle = {
+    bottom: isMobile ? mobileBottomOffset : desktopBottomOffset
+  };
 
   return (
     <>
-      {/* 1. BOTTOM LEFT: Social Brand Stack */}
-      <div className="fixed bottom-20 left-6 z-[490] flex flex-col space-y-3.5 items-center md:bottom-8 select-none">
+      {/* 1. BOTTOM LEFT: Social Brand Stack with Float Animation */}
+      <motion.div 
+        style={positionStyle}
+        animate={{ y: [0, -5, 0] }}
+        transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+        className="fixed left-6 z-[490] flex flex-col space-y-3.5 items-center select-none"
+      >
         {/* Instagram */}
         <a
           href="https://instagram.com/adithya_event_management"
           target="_blank"
           rel="noopener noreferrer"
-          className="w-10 h-10 rounded-full bg-white/5 border border-gold/20 flex items-center justify-center text-champagne hover:text-gold hover:border-gold hover:bg-gold/10 hover:scale-115 transition-all duration-300 shadow-lg cursor-pointer"
+          style={{ background: 'radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeB 90%)' }}
+          className="w-10 h-10 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg cursor-pointer"
           title="Follow us on Instagram"
         >
           <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -77,19 +76,22 @@ const FloatingButtons = () => {
           href="https://facebook.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="w-10 h-10 rounded-full bg-white/5 border border-gold/20 flex items-center justify-center text-champagne hover:text-gold hover:border-gold hover:bg-gold/10 hover:scale-115 transition-all duration-300 shadow-lg cursor-pointer"
+          style={{ backgroundColor: '#1877F2' }}
+          className="w-10 h-10 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg cursor-pointer"
           title="Follow us on Facebook"
         >
           <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
             <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z" />
           </svg>
         </a>
-      </div>
+      </motion.div>
 
-      {/* 2. BOTTOM RIGHT: Expanded FAB Cluster */}
-      <div className="fixed bottom-20 right-6 z-[490] flex flex-col items-center md:bottom-8 select-none">
-        
-        {/* Scroll To Top button (rendered above the FAB when scrolling) */}
+      {/* 2. BOTTOM RIGHT: Vertical Stack (Scroll-to-top, WhatsApp, Call, Chatbot) */}
+      <div 
+        style={positionStyle}
+        className="fixed right-6 z-[490] flex flex-col space-y-3 items-center select-none"
+      >
+        {/* Scroll To Top */}
         <AnimatePresence>
           {showScroll && (
             <motion.button
@@ -97,7 +99,7 @@ const FloatingButtons = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.7, y: 15 }}
               onClick={scrollToTop}
-              className="w-10 h-10 bg-velvet border border-gold/35 text-gold rounded-full flex items-center justify-center shadow-2xl hover:bg-gold hover:text-velvet hover:scale-110 mb-3.5 transition-all cursor-pointer"
+              className="w-12 h-12 bg-darkSection border border-border-soft text-accentGold rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform cursor-pointer"
               title="Scroll to Top"
             >
               <ChevronUp className="w-5 h-5" />
@@ -105,50 +107,37 @@ const FloatingButtons = () => {
           )}
         </AnimatePresence>
 
-        {/* Floating Actions Sub-menu */}
-        <div className="flex flex-col space-y-3.5 items-center mb-3.5">
-          <AnimatePresence>
-            {expanded && (
-              <>
-                {subButtons.map((btn, idx) => (
-                  <motion.div
-                    key={btn.id}
-                    initial={{ opacity: 0, scale: 0.5, y: 25 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.5, y: 25 }}
-                    transition={{ duration: 0.2, delay: idx * 0.05 }}
-                    className="relative group flex items-center"
-                  >
-                    {/* Tooltip Label */}
-                    <span className="absolute right-14 scale-0 group-hover:scale-100 bg-velvet border border-gold/25 text-gold text-[10px] uppercase font-bold tracking-widest px-3 py-1.5 rounded-lg whitespace-nowrap shadow-xl transition-all duration-300 origin-right">
-                      {btn.label}
-                    </span>
-
-                    {/* Action Button */}
-                    <button
-                      onClick={btn.onClick}
-                      className={`w-11 h-11 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300 cursor-pointer ${btn.color}`}
-                    >
-                      {btn.icon}
-                    </button>
-                  </motion.div>
-                ))}
-              </>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Master Gold Gradient FAB */}
+        {/* WhatsApp Chat */}
         <button
-          onClick={() => setExpanded(!expanded)}
-          className={`w-12 h-12 bg-gradient-to-r from-gold-deep via-gold to-gold-rich text-velvet rounded-full flex items-center justify-center shadow-xl shadow-gold/15 transition-transform duration-500 cursor-pointer hover:opacity-90 ${
-            expanded ? 'rotate-180 scale-105' : 'animate-pulse-gold'
-          }`}
-          title="Connect with Us"
+          onClick={() => {
+            const welcomeMessage = "Hello Adithya Event Management! I am interested in inquiring about event decor and catering packages.";
+            window.open(`https://wa.me/919393217676?text=${encodeURIComponent(welcomeMessage)}`, '_blank');
+          }}
+          style={{ backgroundColor: '#25D366' }}
+          className="w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform duration-300 cursor-pointer"
+          title="WhatsApp Chat"
         >
-          {expanded ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
+          <WhatsAppIcon />
         </button>
 
+        {/* Call Coordinator */}
+        <button
+          onClick={() => window.open('tel:+919393217676', '_self')}
+          style={{ backgroundColor: '#22C55E' }}
+          className="w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform duration-300 cursor-pointer"
+          title="Call Coordinator"
+        >
+          <Phone className="w-5 h-5" />
+        </button>
+
+        {/* AI Chatbot Assistant */}
+        <button
+          onClick={triggerChatbot}
+          className="w-12 h-12 rounded-full bg-primaryRose border border-border-soft text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300 cursor-pointer"
+          title="AI Assistant"
+        >
+          <MessageSquare className="w-5 h-5 animate-pulse" />
+        </button>
       </div>
     </>
   );

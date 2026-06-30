@@ -17,6 +17,7 @@ const AdminHeroSliderPage = () => {
   const [saving, setSaving] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   // Form Fields
   const [title, setTitle] = useState('');
@@ -51,6 +52,7 @@ const AdminHeroSliderPage = () => {
     setBtnLink('/booking');
     setIsActive(true);
     setCurrentImageUrl('');
+    setIsUploadingImage(false);
     setFormOpen(true);
   };
 
@@ -76,12 +78,12 @@ const AdminHeroSliderPage = () => {
     setSaving(true);
     try {
       const slideData = {
-        title,
-        subtitle,
-        description,
-        btnText,
-        btnLink,
-        isActive,
+        title: title || '',
+        subtitle: subtitle || '',
+        description: description || '',
+        btnText: btnText || '',
+        btnLink: btnLink || '',
+        isActive: isActive !== false,
         imageUrl: currentImageUrl,
         displayOrder: editingId ? (slides.find(s => s.id === editingId)?.displayOrder || 1) : (slides.length + 1)
       };
@@ -99,7 +101,8 @@ const AdminHeroSliderPage = () => {
       setFormOpen(false);
     } catch (error) {
       console.error('Slide save error:', error);
-      toast.error('Failed to save slide configurations.', { id: 'slideUpload' });
+      const errMsg = error?.message || error?.toString() || 'Unknown error';
+      toast.error(`Failed to save: ${errMsg}`, { id: 'slideUpload' });
     } finally {
       setSaving(false);
     }
@@ -112,7 +115,7 @@ const AdminHeroSliderPage = () => {
       toast.success('Slide deleted from database.');
     } catch (error) {
       console.error(error);
-      toast.error('Failed to delete slide.');
+      toast.error(`Failed to delete slide: ${error?.message || error?.toString()}`);
     }
   };
 
@@ -122,7 +125,7 @@ const AdminHeroSliderPage = () => {
       toast.success(`Slide set to ${!slide.isActive ? 'Active' : 'Inactive'}`);
     } catch (error) {
       console.error(error);
-      toast.error('Failed to toggle active status.');
+      toast.error(`Failed to toggle active status: ${error?.message || error?.toString()}`);
     }
   };
 
@@ -142,7 +145,7 @@ const AdminHeroSliderPage = () => {
       toast.success('Slides reordered successfully.');
     } catch (error) {
       console.error(error);
-      toast.error('Failed to save updated sorting order.');
+      toast.error(`Failed to save updated sorting order: ${error?.message || error?.toString()}`);
     }
   };
 
@@ -225,7 +228,12 @@ const AdminHeroSliderPage = () => {
                     Background Image (WebP Under 500KB Pipeline)
                   </span>
                   <ImageUploadWithCompressor 
-                    onUploadSuccess={(url) => setCurrentImageUrl(url)}
+                    onUploadStart={() => setIsUploadingImage(true)}
+                    onUploadSuccess={(url) => {
+                      setCurrentImageUrl(url);
+                      setIsUploadingImage(false);
+                    }}
+                    onUploadError={() => setIsUploadingImage(false)}
                     currentImageUrl={currentImageUrl}
                   />
                 </div>
@@ -260,10 +268,10 @@ const AdminHeroSliderPage = () => {
                 </Button>
                 <Button 
                   type="submit" 
-                  disabled={saving} 
+                  disabled={saving || isUploadingImage} 
                   className="px-8 py-2 text-xs font-bold uppercase tracking-widest"
                 >
-                  {saving ? 'Saving...' : 'Save Slide'}
+                  {saving ? 'Saving...' : isUploadingImage ? 'Uploading image...' : 'Save Slide'}
                 </Button>
               </div>
             </form>
