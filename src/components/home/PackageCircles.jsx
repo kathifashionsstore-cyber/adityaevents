@@ -45,7 +45,7 @@ const PackageCircles = () => {
         </p>
 
         {/* Circular layouts */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 justify-center items-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 justify-center items-center">
           {circles.map((item, index) => (
             <motion.div
               key={index}
@@ -54,7 +54,7 @@ const PackageCircles = () => {
             >
               <Link to={item.link} className="relative flex flex-col items-center">
                 {/* Outermost rotating circular gold frame */}
-                <div className={`w-[170px] h-[170px] rounded-full p-[2px] bg-gradient-to-tr ${item.color} group-hover:rotate-180 transition-transform duration-700`}>
+                <div className={`w-[140px] h-[140px] md:w-[170px] md:h-[170px] rounded-full p-[2px] bg-gradient-to-tr ${item.color} group-hover:rotate-180 transition-transform duration-700`}>
                   {/* Inside image circle */}
                   <div className="w-full h-full rounded-full overflow-hidden border-2 border-amethyst bg-amethyst relative">
                     <img

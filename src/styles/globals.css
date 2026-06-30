@@ -45,6 +45,11 @@ body, header, nav, footer, section, div, button, input, select, textarea, a, p, 
   transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, fill 0.4s ease, stroke 0.4s ease, box-shadow 0.4s ease;
 }
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 html {
   scroll-behavior: smooth;
   font-size: 16px;
@@ -54,7 +59,6 @@ body {
   font-family: var(--font-body);
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 

@@ -265,7 +265,7 @@ const HeroSection = () => {
       </div>
 
       {/* Dark stats strip band below */}
-      <div className="w-full bg-darkSection border border-primaryRose/10 py-5 px-6 md:px-12 rounded-[20px] mt-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-left shadow-md">
+      <div className="w-full bg-darkSection border border-primaryRose/10 py-5 px-4 md:px-12 rounded-[20px] mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 text-left shadow-md">
         
         {/* Stat Item 1 */}
         <div className="flex items-center space-x-3.5">
