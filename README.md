@@ -1,6 +1,6 @@
 # Adithya Event Management System
 
-Premium, production-ready full-stack event management and catering application built for **Adithya Event Management** in Vuyyuru, Krishna District, Andhra Pradesh, India.
+Premium, production-ready full-stack event management and catering application built for **Adithya Event Management** in Vijayawada, Krishna District, Andhra Pradesh, India.
 
 ---
 

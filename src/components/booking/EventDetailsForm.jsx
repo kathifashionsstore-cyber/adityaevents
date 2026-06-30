@@ -40,7 +40,7 @@ const EventDetailsForm = ({ onNext, onPrev }) => {
     }
 
     setChecking(true);
-    // Verify booking date availability in Vuyyuru database
+    // Verify booking date availability in Vijayawada database
     const available = await checkSlotAvailability(localDetails.eventDate);
     setChecking(false);
 
@@ -96,9 +96,9 @@ const EventDetailsForm = ({ onNext, onPrev }) => {
             value={localDetails.stageDecoration}
             onChange={handleDetailsChange}
             options={[
-              { value: 'standard', label: 'Standard Classic Decor (Included)' },
-              { value: 'premium', label: 'Premium Stage Setup (+₹15,000)' },
-              { value: 'royal', label: 'Royal Grand Backdrop Setup (+₹40,000)' },
+              { value: 'standard', label: 'Standard Classic Decor Theme' },
+              { value: 'premium', label: 'Premium Stage Setup' },
+              { value: 'royal', label: 'Royal Grand Backdrop Setup' },
             ]}
           />
         </div>
@@ -108,7 +108,7 @@ const EventDetailsForm = ({ onNext, onPrev }) => {
           name="venueAddress"
           value={localDetails.venueAddress}
           onChange={handleDetailsChange}
-          placeholder="Detailed address in Vuyyuru/Vijayawada"
+          placeholder="Detailed address of the venue"
         />
       </div>
 

@@ -8,6 +8,7 @@ import PackageCircles from '../../components/home/PackageCircles';
 import ServicesSection from '../../components/home/ServicesSection';
 import GallerySection from '../../components/home/GallerySection';
 import TestimonialsSection from '../../components/home/TestimonialsSection';
+import GoogleReviewsSection from '../../components/home/GoogleReviewsSection';
 import FAQSection from '../../components/home/FAQSection';
 import ContactSection from '../../components/home/ContactSection';
 import BrochureDownload from '../../components/home/BrochureDownload';
@@ -25,6 +26,7 @@ const HomePage = () => {
       <ServicesSection />
       <GallerySection />
       <TestimonialsSection />
+      <GoogleReviewsSection />
       <FAQSection />
       <ContactSection />
       <BrochureDownload />

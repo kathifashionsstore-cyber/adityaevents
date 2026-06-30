@@ -1,7 +1,6 @@
 // src/utils/pdfGenerator.js
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
-import { formatCurrency } from './formatters';
 
 // Helper to draw a vector QR code block synchronously
 const drawQRVerificationBlock = (doc, x, y, size) => {
@@ -38,135 +37,180 @@ const drawQRVerificationBlock = (doc, x, y, size) => {
   doc.rect(x + 6, y + 15, 3, 1, 'F');
 };
 
-export const generateBookingQuotationPDF = (bookingData, pricing) => {
-  const logoImg = new Image();
-  logoImg.src = '/logo.webp';
+const drawHeader = (doc, titleText) => {
+  // Draw header block - Deep Amethyst background (#1C0A2E / rgb(28, 10, 46))
+  doc.setFillColor(28, 10, 46);
+  doc.rect(0, 0, 210, 42, 'F');
+
+  // Company Header Text
+  doc.setTextColor(212, 175, 55); // Royal Gold (#D4AF37)
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(18);
+  doc.text('ADITHYA EVENT MANAGEMENT', 15, 18);
+
+  doc.setTextColor(247, 231, 206); // Champagne (#F7E7CE)
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8.5);
+  doc.text('Premium Royal Events & Catering | Vijayawada, Andhra Pradesh', 15, 26);
+  doc.text('Call: +91 93932 17676 | Email: info@adithyaevents.com', 15, 32);
+
+  // Document Title Badge (e.g. CUSTOMER COPY / OFFICE COPY)
+  doc.setFillColor(212, 175, 55);
+  doc.rect(145, 12, 50, 8, 'F');
+  doc.setTextColor(28, 10, 46);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.text(titleText, 170, 17, { align: 'center' });
+
+  // Separator line
+  doc.setDrawColor(212, 175, 55); // Gold
+  doc.setLineWidth(1);
+  doc.line(0, 42, 210, 42);
+};
+
+export const generateBookingQuotationPDF = (bookingData) => {
+  const doc = new jsPDF();
   
-  const buildPdf = () => {
-    const doc = new jsPDF();
-    
-    // Draw header block - Deep Amethyst background (#1C0A2E / rgb(28, 10, 46))
-    doc.setFillColor(28, 10, 46);
-    doc.rect(0, 0, 210, 42, 'F');
+  // ================= PAGE 1: CUSTOMER COPY =================
+  drawHeader(doc, 'CUSTOMER COPY');
 
-    // Inject Logo (WebP or PNG image format fallback)
-    try {
-      doc.addImage(logoImg, 'WEBP', 15, 6, 28, 28);
-    } catch (e) {
-      console.warn('Failed to embed webp logo in PDF, drawing text fallback:', e);
-    }
+  // Quote Metadata
+  doc.setTextColor(28, 10, 46); // Deep Amethyst
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text('OFFICIAL EVENT BOOKING SUMMARY', 15, 54);
 
-    // Company Header Text
-    doc.setTextColor(212, 175, 55); // Royal Gold (#D4AF37)
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(20);
-    doc.text('ADITHYA EVENT MANAGEMENT', 48, 18);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.text(`Date Issued: ${new Date().toLocaleDateString('en-IN')}`, 145, 52);
+  doc.text(`Booking ID: ${bookingData.id || 'N/A'}`, 145, 58);
+  
+  // Customer Details Box (Warm Cream Background)
+  doc.setFillColor(253, 248, 240); // Warm Ivory (#FDF8F0)
+  doc.setDrawColor(212, 175, 55, 0.4);
+  doc.rect(15, 64, 180, 36, 'FD');
+  
+  doc.setTextColor(28, 10, 46);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Client details:', 20, 71);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Name: ${bookingData.customerName}`, 20, 78);
+  doc.text(`Phone: ${bookingData.customerPhone}`, 20, 84);
+  doc.text(`Email: ${bookingData.customerEmail || 'N/A'}`, 20, 91);
 
-    doc.setTextColor(247, 231, 206); // Champagne (#F7E7CE)
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9);
-    doc.text('Premium Royal Events & Catering | Vuyyuru, Andhra Pradesh', 48, 26);
-    doc.text('Call: +91 93932 17676 | Email: info@adithyaevents.com', 48, 32);
+  doc.text(`Event Category: ${String(bookingData.eventType || '').toUpperCase()}`, 105, 78);
+  doc.text(`Event Date: ${bookingData.eventDate}`, 105, 84);
+  doc.text(`Venue Name: ${bookingData.venueName || 'To Be Specified'}`, 105, 91);
 
-    // Separator line
-    doc.setDrawColor(212, 175, 55); // Gold
-    doc.setLineWidth(1);
-    doc.line(0, 42, 210, 42);
+  // Specifications Table Rows (No Prices!)
+  const tableRows = [
+    ['Base Event Package', bookingData.packageName || 'Custom Decoration Package', 'Included in booking'],
+    ['Theme Stage Decoration', bookingData.stageDecoration || 'Standard Backdrop theme', 'Included in booking'],
+    ['Catering & dining plates', `${bookingData.vegGuests || 0} Vegetarian / ${bookingData.nonVegGuests || 0} Non-Vegetarian plates`, 'Included in booking'],
+    ['Media & Event Coverage', bookingData.addons?.join(', ') || 'Photography / Videography', 'Included in booking'],
+    ['Catering Menu Choice', bookingData.catering || 'Standard Buffet selection', 'Included in booking']
+  ];
 
-    // Quote Metadata
-    doc.setTextColor(28, 10, 46); // Deep Amethyst
-    doc.setFontSize(13);
-    doc.setFont('helvetica', 'bold');
-    doc.text('ESTIMATE QUOTATION', 15, 54);
+  doc.autoTable({
+    startY: 108,
+    head: [['Item Description', 'Selected Specifications', 'Commercial Status']],
+    body: tableRows,
+    headStyles: { fillColor: [45, 27, 78], textColor: [247, 231, 206], fontStyle: 'bold' },
+    theme: 'striped',
+    styles: { fontSize: 8.5, font: 'helvetica' },
+  });
 
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9);
-    doc.text(`Date Issued: ${new Date().toLocaleDateString('en-IN')}`, 145, 52);
-    doc.text(`Reference ID: ${bookingData.id || 'TEMP-QUOTE'}`, 145, 58);
-    
-    // Customer Details Box (Warm Cream Background)
-    doc.setFillColor(253, 248, 240); // Warm Ivory (#FDF8F0)
-    doc.setDrawColor(212, 175, 55, 0.4);
-    doc.rect(15, 64, 180, 34, 'FD');
-    
-    doc.setTextColor(28, 10, 46);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Client details:', 20, 71);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Name: ${bookingData.customerName}`, 20, 78);
-    doc.text(`Phone: ${bookingData.customerPhone}`, 20, 84);
-    doc.text(`Email: ${bookingData.customerEmail || 'N/A'}`, 20, 91);
+  let finalY = doc.lastAutoTable.finalY + 12;
 
-    doc.text(`Event Category: ${bookingData.eventType.toUpperCase()}`, 105, 78);
-    doc.text(`Event Date: ${bookingData.eventDate}`, 105, 84);
-    doc.text(`Venue Name: ${bookingData.venueName || 'To Be Specified'}`, 105, 91);
+  // QR Verification Block
+  drawQRVerificationBlock(doc, 15, finalY, 20);
+  doc.setFontSize(7.5);
+  doc.setTextColor(100, 100, 100);
+  doc.setFont('helvetica', 'italic');
+  doc.text('Scan to verify', 15, finalY + 23);
+  doc.text('booking details', 15, finalY + 26);
 
-    // Pricing Table Rows
-    const tableRows = [
-      ['Base Package / Decoration', bookingData.packageName || 'Custom Stage Decor', formatCurrency(pricing.basePrice)],
-      ['Stage Addon (' + (bookingData.stageDecoration || 'standard') + ')', 'Decoration Upgrade', formatCurrency(pricing.stageAddon)],
-      ['Premium Catering', `${bookingData.vegGuests || 0} Veg / ${bookingData.nonVegGuests || 0} Non-Veg plates`, formatCurrency(pricing.cateringTotal)],
-      ['Media & DJ Addons', 'Photography, DJ, Drone', formatCurrency(pricing.mediaAddon)],
-      ['Coupon Discount', bookingData.couponCode || 'None', `-${formatCurrency(pricing.discount)}`],
-    ];
+  // Terms and Notes
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8.5);
+  doc.setTextColor(28, 10, 46);
+  doc.text('General Terms & Conditions:', 45, finalY + 2);
+  doc.setTextColor(100, 100, 100);
+  doc.setFontSize(7.5);
+  doc.text('1. Stage setup requires 12 hours onsite access prior to event start time.', 45, finalY + 8);
+  doc.text('2. Menu customizers must be frozen at least 7 days before event date.', 45, finalY + 13);
+  doc.text('3. Any additional lighting or sound extensions will link to WhatsApp additions.', 45, finalY + 18);
 
-    doc.autoTable({
-      startY: 106,
-      head: [['Item Description', 'Details', 'Subtotal (INR)']],
-      body: tableRows,
-      headStyles: { fillColor: [45, 27, 78], textColor: [247, 231, 206], fontStyle: 'bold' }, // Amethyst & Champagne
-      theme: 'striped',
-      styles: { fontSize: 8.5, font: 'helvetica' },
-      columnStyles: { 2: { halign: 'right' } }
-    });
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(212, 175, 55); // Gold
+  doc.setFontSize(9);
+  doc.text('Thank you for choosing Adithya Event Management!', 105, finalY + 38, { align: 'center' });
 
-    const finalY = doc.lastAutoTable.finalY + 12;
+  // ================= PAGE 2: OFFICE COPY =================
+  doc.addPage();
+  drawHeader(doc, 'OFFICE COPY');
 
-    // QR Verification & Final totals layout
-    drawQRVerificationBlock(doc, 15, finalY, 20);
-    doc.setFontSize(7.5);
-    doc.setTextColor(100, 100, 100);
-    doc.setFont('helvetica', 'italic');
-    doc.text('Scan to verify', 15, finalY + 23);
-    doc.text('official quotation', 15, finalY + 26);
+  doc.setTextColor(28, 10, 46);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text('INTERNAL OFFICE RECORD & ACCOUNTING LEDGER', 15, 54);
 
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9.5);
-    doc.setTextColor(28, 10, 46);
-    doc.text('Subtotal:', 125, finalY);
-    doc.text(formatCurrency(pricing.subtotal - pricing.discount), 180, finalY, { align: 'right' });
+  // Client Summary
+  doc.setFillColor(253, 248, 240);
+  doc.rect(15, 64, 180, 32, 'FD');
+  doc.setFontSize(8.5);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Event Summary:', 20, 71);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`ID: ${bookingData.id || 'N/A'} | Client: ${bookingData.customerName} | Phone: ${bookingData.customerPhone}`, 20, 78);
+  doc.text(`Date: ${bookingData.eventDate} | Venue: ${bookingData.venueName || 'N/A'} | City: ${bookingData.city || 'Vijayawada'}`, 20, 84);
+  doc.text(`Category: ${String(bookingData.eventType || '').toUpperCase()} | Decor Tier: ${bookingData.packageName || 'Custom'}`, 20, 90);
 
-    doc.text('GST (18%):', 125, finalY + 6);
-    doc.text(formatCurrency(pricing.tax), 180, finalY + 6, { align: 'right' });
+  // Specifications
+  const officeTableRows = [
+    ['Catering Plates', `Veg: ${bookingData.vegGuests || 0} / Non-Veg: ${bookingData.nonVegGuests || 0}`, 'Staff Assignment: ____________'],
+    ['Backdrop Decor', bookingData.stageDecoration || 'Standard theme', 'Vendor Blocked: ____________'],
+    ['DJ / Sound Setup', bookingData.addons?.includes('sound') ? 'Yes' : 'No', 'Equipment Issued: ____________'],
+    ['Photography Crew', bookingData.addons?.includes('photography') ? 'Yes' : 'No', 'Lenses Blocked: ____________'],
+  ];
 
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(45, 27, 78); // Amethyst
-    doc.text('GRAND TOTAL ESTIMATE:', 105, finalY + 14);
-    doc.text(formatCurrency(pricing.total), 180, finalY + 14, { align: 'right' });
+  doc.autoTable({
+    startY: 104,
+    head: [['Office Checkpoints', 'Specifications Details', 'Status Log Notes']],
+    body: officeTableRows,
+    headStyles: { fillColor: [45, 27, 78], textColor: [247, 231, 206], fontStyle: 'bold' },
+    theme: 'grid',
+    styles: { fontSize: 8.5, font: 'helvetica' },
+  });
 
-    // Separator before notes
-    doc.setDrawColor(230, 230, 230);
-    doc.line(15, finalY + 24, 195, finalY + 24);
+  finalY = doc.lastAutoTable.finalY + 12;
 
-    // Footer notes
-    doc.setTextColor(100, 100, 100);
-    doc.setFont('helvetica', 'italic');
-    doc.setFontSize(8);
-    doc.text('* This is an estimated price quotation based on choices requested. Final prices may vary.', 15, finalY + 34);
-    doc.text('* 50% advance payment required to block the date. Balance due on event start date.', 15, finalY + 39);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(212, 175, 55); // Gold
-    doc.text('Thank you for choosing Adithya Event Management!', 105, finalY + 49, { align: 'center' });
+  // INTERNAL ACCOUNTING FIELDS (Admin budgeting placeholder blocks)
+  doc.setFillColor(253, 248, 240);
+  doc.setDrawColor(28, 10, 46, 0.25);
+  doc.rect(15, finalY, 180, 52, 'FD');
 
-    // Save the PDF
-    doc.save(`Adithya_Events_Quotation_${bookingData.customerName.replace(/\s+/g, '_')}.pdf`);
-  };
+  doc.setTextColor(28, 10, 46);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.text('Internal Accounting Log (INR):', 22, finalY + 8);
 
-  // Trigger loading image, and generate PDF
-  if (logoImg.complete) {
-    buildPdf();
-  } else {
-    logoImg.onload = buildPdf;
-    logoImg.onerror = buildPdf; // fallback if image fails to load
-  }
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8.5);
+  doc.text('1. Total Quote Estimate (Agreed): __________________', 22, finalY + 16);
+  doc.text('2. Advance Received:            __________________', 22, finalY + 22);
+  doc.text('3. Decor Vendor Cost:           __________________', 22, finalY + 28);
+  doc.text('4. Catering Ingredients Cost:    __________________', 22, finalY + 34);
+  doc.text('5. Labor & Logistics Expense:    __________________', 22, finalY + 40);
+  doc.text('6. Net Profit Margin:           __________________', 22, finalY + 46);
+
+  // Signature Block
+  doc.setFont('helvetica', 'bold');
+  doc.text('Office approvals:', 125, finalY + 16);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Lead Planner: __________________', 125, finalY + 28);
+  doc.text('Director Sign: __________________', 125, finalY + 40);
+
+  // Save the PDF
+  doc.save(`Adithya_Events_Receipt_${bookingData.customerName.replace(/\s+/g, '_')}.pdf`);
 };

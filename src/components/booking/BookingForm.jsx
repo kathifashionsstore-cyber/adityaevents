@@ -4,24 +4,17 @@ import PackageSelector from './PackageSelector';
 import EventDetailsForm from './EventDetailsForm';
 import ContactDetailsForm from './ContactDetailsForm';
 import QuoteReview from './QuoteReview';
-import PaymentStep from './PaymentStep';
 import BookingSuccess from './BookingSuccess';
 
 const BookingForm = () => {
   const [step, setStep] = useState(1);
   const [createdBooking, setCreatedBooking] = useState(null);
-  const [successfulPayment, setSuccessfulPayment] = useState(null);
 
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
   const handleBookingCreated = (booking) => {
     setCreatedBooking(booking);
-  };
-
-  const handlePaymentSuccess = (payment) => {
-    setSuccessfulPayment(payment);
-    nextStep();
   };
 
   const stepsLabel = ['Package', 'Customizer', 'Details', 'Review', 'Success'];

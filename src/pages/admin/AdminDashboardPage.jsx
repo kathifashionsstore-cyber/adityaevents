@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import PageTransition from '../../components/common/PageTransition';
 import DashboardCards from '../../components/admin/DashboardCards';
-import RevenueCharts from '../../components/admin/RevenueCharts';
 import BookingTable from '../../components/admin/BookingTable';
 import ActivityLog from '../../components/admin/ActivityLog';
 import { collection, getDocs, limit, query, orderBy } from 'firebase/firestore';
@@ -12,10 +11,10 @@ import Spinner from '../../components/common/Spinner';
 const AdminDashboardPage = () => {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
-    totalRevenue: 0,
+    totalBookings: 0,
     activeBookings: 0,
-    totalLeads: 0,
-    totalExpenses: 0
+    pendingBookings: 0,
+    totalLeads: 0
   });
   const [recentBookings, setRecentBookings] = useState([]);
   const [recentLogs, setRecentLogs] = useState([]);
@@ -25,14 +24,16 @@ const AdminDashboardPage = () => {
     try {
       // 1. Fetch Bookings
       const bookingsSnap = await getDocs(collection(db, 'bookings'));
-      let revenue = 0;
+      let totalBookings = bookingsSnap.size;
       let active = 0;
+      let pending = 0;
       const bookingsList = [];
+      
       bookingsSnap.forEach((doc) => {
         const data = doc.data();
         bookingsList.push({ id: doc.id, ...data });
-        revenue += parseFloat(data.paidAmount || 0);
         if (data.status === 'confirmed') active++;
+        if (data.status === 'pending') pending++;
       });
       
       // Sort and slice recent
@@ -45,21 +46,14 @@ const AdminDashboardPage = () => {
       const leadsSnap = await getDocs(collection(db, 'leads'));
       const totalLeads = leadsSnap.size;
 
-      // 3. Fetch Expenses
-      const expensesSnap = await getDocs(collection(db, 'expenses'));
-      let expensesTotal = 0;
-      expensesSnap.forEach((doc) => {
-        expensesTotal += parseFloat(doc.data().amount || 0);
-      });
-
       setStats({
-        totalRevenue: revenue,
+        totalBookings,
         activeBookings: active,
-        totalLeads,
-        totalExpenses: expensesTotal
+        pendingBookings: pending,
+        totalLeads
       });
 
-      // 4. Fetch logs
+      // 3. Fetch logs
       const logsQuery = query(collection(db, 'activityLogs'), orderBy('timestamp', 'desc'), limit(5));
       const logsSnap = await getDocs(logsQuery);
       const logsList = [];
@@ -92,9 +86,6 @@ const AdminDashboardPage = () => {
       <div className="space-y-8 pb-12">
         {/* Top Cards grid */}
         <DashboardCards stats={stats} />
-
-        {/* Chart section */}
-        <RevenueCharts />
 
         {/* Tables & Logs */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

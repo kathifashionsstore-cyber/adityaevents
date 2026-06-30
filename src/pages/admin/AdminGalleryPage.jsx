@@ -135,7 +135,7 @@ const AdminGalleryPage = () => {
                 name="caption"
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
-                placeholder="e.g. Traditional stage setup Vuyyuru"
+                placeholder="e.g. Traditional stage setup Vijayawada"
                 required
               />
               <Select

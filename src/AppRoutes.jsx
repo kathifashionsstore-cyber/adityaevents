@@ -20,9 +20,6 @@ import AdminLoginPage from './pages/admin/AdminLoginPage';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import AdminBookingsPage from './pages/admin/AdminBookingsPage';
 import AdminLeadsPage from './pages/admin/AdminLeadsPage';
-import AdminPaymentsPage from './pages/admin/AdminPaymentsPage';
-import AdminExpensesPage from './pages/admin/AdminExpensesPage';
-import AdminCouponsPage from './pages/admin/AdminCouponsPage';
 import AdminGalleryPage from './pages/admin/AdminGalleryPage';
 import AdminFAQPage from './pages/admin/AdminFAQPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage';
@@ -30,6 +27,9 @@ import AdminNotificationsPage from './pages/admin/AdminNotificationsPage';
 import AdminHeroBannersPage from './pages/admin/AdminHeroBannersPage';
 import AdminMarketingPage from './pages/admin/AdminMarketingPage';
 import AdminEventTypesPage from './pages/admin/AdminEventTypesPage';
+import AdminHeroSliderPage from './pages/admin/AdminHeroSliderPage';
+import AdminGoogleReviewsPage from './pages/admin/AdminGoogleReviewsPage';
+import AdminServicesPage from './pages/admin/AdminServicesPage';
 
 const AppRoutes = () => {
   return (
@@ -54,10 +54,10 @@ const AppRoutes = () => {
         <Route path="dashboard" element={<AdminDashboardPage />} />
         <Route path="bookings" element={<AdminBookingsPage />} />
         <Route path="leads" element={<AdminLeadsPage />} />
-        <Route path="payments" element={<AdminPaymentsPage />} />
-        <Route path="expenses" element={<AdminExpensesPage />} />
-        <Route path="coupons" element={<AdminCouponsPage />} />
+        <Route path="hero-slider" element={<AdminHeroSliderPage />} />
+        <Route path="google-reviews" element={<AdminGoogleReviewsPage />} />
         <Route path="gallery" element={<AdminGalleryPage />} />
+        <Route path="services" element={<AdminServicesPage />} />
         <Route path="hero-banners" element={<AdminHeroBannersPage />} />
         <Route path="marketing" element={<AdminMarketingPage />} />
         <Route path="event-types" element={<AdminEventTypesPage />} />

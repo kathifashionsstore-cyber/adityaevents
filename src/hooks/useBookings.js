@@ -28,11 +28,11 @@ export const useBookings = () => {
     }
   }, []);
 
-  const saveBooking = async (bookingData, pricing) => {
+  const saveBooking = async (bookingData) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await createBookingAPI(bookingData, pricing);
+      const res = await createBookingAPI(bookingData);
       setLoading(false);
       return res;
     } catch (e) {

@@ -2,18 +2,23 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
-import { MessageSquare, X, Send, Bot, User, Calculator } from 'lucide-react';
-import { formatCurrency } from '../../utils/formatters';
-import { calculateQuote } from '../../utils/quoteCalculator';
+import { MessageSquare, X, Send, Bot, User } from 'lucide-react';
 import { BUSINESS_DETAILS } from '../../utils/constants';
 
 const AIChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const handleToggle = () => setIsOpen(prev => !prev);
+    window.addEventListener('toggle-chatbot', handleToggle);
+    return () => window.removeEventListener('toggle-chatbot', handleToggle);
+  }, []);
+
   const [messages, setMessages] = useState([
     {
       id: 'welcome',
       sender: 'bot',
-      text: 'Namaste! Welcome to Adithya Event Management. I am your event assistant. How can I help you customize your celebration today? Ask me about: \n\n• Wedding decorations stages\n• Catering menus & plate pricing\n• Local office coordinates in Vuyyuru\n• Instant budget quote estimations',
+      text: 'Namaste! Welcome to Adithya Event Management. I am your event assistant. How can I help you customize your celebration today? Ask me about: \n\n• Wedding decorations stages\n• Catering menus & food selection\n• Local office coordinates in Vijayawada\n• Submitting a booking slot request',
       timestamp: new Date().toISOString()
     }
   ]);
@@ -36,54 +41,25 @@ const AIChatbot = () => {
 
     // Check location query
     if (text.includes('location') || text.includes('where') || text.includes('address') || text.includes('office')) {
-      return `Our main office is located in *Vuyyuru, Krishna District, Andhra Pradesh* (Near Main Road). We support events across Vuyyuru, Vijayawada, and Krishna district.`;
+      return `Our main office is located in *Vijayawada, Krishna District, Andhra Pradesh* (Near Main Road). We support events across Vijayawada and the surrounding Krishna district.`;
     }
 
     // Check catering menu query
     if (text.includes('catering') || text.includes('food') || text.includes('plate') || text.includes('menu') || text.includes('lunch') || text.includes('dinner')) {
-      return `Our catering platters are fully customisable:\n\n• *Veg Delight (₹350/plate)*: Pappu, Andhra curries, sweets, Vuyyuru special Sambar.\n• *Royal Non-Veg Feast (₹550/plate)*: Gongura Mutton, Chicken Biryani, Nellore Fish Pulusu.\n\nType something like *"Estimate: 200 veg and 100 nonveg"* to see pricing calculations.`;
+      return `Our catering platters are fully customisable, featuring traditional Andhra veg delicacies, royal non-veg spreads, live counters, and hot sweets. Contact us on WhatsApp to customize your catering menu card!`;
     }
 
     // Check wedding decors query
     if (text.includes('decor') || text.includes('stage') || text.includes('wedding') || text.includes('mandapam') || text.includes('backdrop')) {
-      return `We have 3 premium wedding packages:\n\n1. *Royal Classic Wedding (₹1,50,000)*: Standard stage, entry arches.\n2. *Vuyyuru Royal Wedding (₹3,00,000)*: Grand floral stage, smoke/couple entry, VIP chairs.\n3. *Imperial Andhra Wedding (₹6,00,000)*: Theme stage, pyro entry, management.\n\nType *"Estimate: Wedding Royal"* to calculate.`;
+      return `We offer premium wedding decor themes ranging from standard classic setups to grand floral mandapams, thematic entry gates, selfie booths, and cinematic couple entrances. We can also build bespoke 3D design pre-visualizations!`;
     }
 
     // Estimate Quote parsing
     if (text.includes('estimate') || text.includes('cost') || text.includes('quote') || text.includes('price')) {
-      // Look for numbers in text for plates
-      const numbers = text.match(/\d+/g);
-      let vegCount = 0;
-      let nonVegCount = 0;
-      let packageCost = 150000; // Classic Wedding default
-      let packageName = 'Royal Classic Wedding';
-
-      if (numbers) {
-        if (numbers.length === 1) {
-          vegCount = parseInt(numbers[0]);
-        } else if (numbers.length >= 2) {
-          vegCount = parseInt(numbers[0]);
-          nonVegCount = parseInt(numbers[1]);
-        }
-      }
-
-      if (text.includes('royal')) {
-        packageCost = 300000;
-        packageName = 'Vuyyuru Royal Wedding';
-      } else if (text.includes('imperial')) {
-        packageCost = 600000;
-        packageName = 'Imperial Andhra Wedding';
-      }
-
-      const cateringTotal = (vegCount * 350) + (nonVegCount * 550);
-      const subtotal = packageCost + cateringTotal;
-      const tax = subtotal * 0.18;
-      const total = subtotal + tax;
-
-      return `Here is a custom estimate quote:\n\n• *Decor:* ${packageName} (${formatCurrency(packageCost)})\n• *Catering Veg (${vegCount} plates):* ${formatCurrency(vegCount * 350)}\n• *Catering Non-Veg (${nonVegCount} plates):* ${formatCurrency(nonVegCount * 550)}\n• *Subtotal:* ${formatCurrency(subtotal)}\n• *GST (18%):* ${formatCurrency(tax)}\n\n*ESTIMATED TOTAL:* ${formatCurrency(total)}\n\nBook your slot on the Booking Page to secure this price!`;
+      return `We calculate customized quotes based on your specific decoration choices, guest counts, and catering requirements. Since every celebration is unique, we negotiate pricing manually over call or WhatsApp. Please call us at *+91 93932 17676* to get a custom quote!`;
     }
 
-    return `Thank you for writing. I can help you calculate pricing budgets. Type *"Estimate: 200 veg guests and Wedding Royal"* to run cost calculations, or call us at *+91 93932 17676*.`;
+    return `I am here to help you plan your dream celebration. You can ask me about our wedding stage decors, catering menus, office location, or click 'Book Now' to request a slot! For custom queries, call us at *+91 93932 17676*.`;
   };
 
   const handleSendMessage = async (e) => {

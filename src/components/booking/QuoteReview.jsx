@@ -1,51 +1,13 @@
 // src/components/booking/QuoteReview.jsx
 import React, { useState } from 'react';
 import { useCart } from '../../context/CartContext';
-import { formatCurrency } from '../../utils/formatters';
 import Button from '../common/Button';
-import Input from '../common/Input';
 import toast from 'react-hot-toast';
-import { generateBookingQuotationPDF } from '../../utils/pdfGenerator';
-import { FileText, Tag, Trash } from 'lucide-react';
 import { createBooking } from '../../services/bookingService';
 
 const QuoteReview = ({ onNext, onPrev, onBookingCreated }) => {
-  const { selectedPackage, cateringDetails, eventDetails, appliedCoupon, pricing, applyCouponCode, removeCoupon } = useCart();
-  const [couponCode, setCouponCode] = useState('');
-  const [validating, setValidating] = useState(false);
+  const { selectedPackage, cateringDetails, eventDetails } = useCart();
   const [saving, setSaving] = useState(false);
-
-  const handleApplyCoupon = async (e) => {
-    e.preventDefault();
-    if (!couponCode) return;
-    setValidating(true);
-    const res = await applyCouponCode(couponCode);
-    setValidating(false);
-    
-    if (res.success) {
-      toast.success(res.message);
-      setCouponCode('');
-    } else {
-      toast.error(res.message);
-    }
-  };
-
-  const handleDownloadQuote = () => {
-    const mockBookingData = {
-      customerName: eventDetails.customerName,
-      customerPhone: eventDetails.customerPhone,
-      customerEmail: eventDetails.customerEmail,
-      eventType: eventDetails.eventType,
-      eventDate: eventDetails.eventDate,
-      venueName: eventDetails.venueName,
-      packageName: selectedPackage?.name || 'Custom Decor',
-      stageDecoration: eventDetails.stageDecoration,
-      vegGuests: cateringDetails.vegGuests,
-      nonVegGuests: cateringDetails.nonVegGuests,
-      couponCode: appliedCoupon?.code || ''
-    };
-    generateBookingQuotationPDF(mockBookingData, pricing);
-  };
 
   const handleConfirmBooking = async () => {
     setSaving(true);
@@ -69,11 +31,10 @@ const QuoteReview = ({ onNext, onPrev, onBookingCreated }) => {
         cateringEnabled: cateringDetails.enabled,
         vegGuests: cateringDetails.vegGuests,
         nonVegGuests: cateringDetails.nonVegGuests,
-        couponCode: appliedCoupon?.code || '',
         notes: ''
       };
 
-      const booking = await createBooking(bookingInput, pricing);
+      const booking = await createBooking(bookingInput);
       toast.success('Booking reference generated successfully!');
       onBookingCreated(booking);
       onNext();

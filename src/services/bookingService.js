@@ -1,9 +1,9 @@
 // src/services/bookingService.js
-import { doc, setDoc, getDoc, updateDoc, collection, query, getDocs, arrayUnion, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, getDoc, updateDoc, collection, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { generateBookingId } from '../utils/helpers';
 
-export const createBooking = async (bookingData, pricing) => {
+export const createBooking = async (bookingData) => {
   const bookingId = generateBookingId();
   const newBooking = {
     id: bookingId,
@@ -15,7 +15,7 @@ export const createBooking = async (bookingData, pricing) => {
     eventTime: bookingData.eventTime || '18:00',
     venueName: bookingData.venueName,
     venueAddress: bookingData.venueAddress,
-    city: bookingData.city || 'Vuyyuru',
+    city: bookingData.city || 'Vijayawada',
     packageName: bookingData.packageName || 'Custom Decor',
     stageDecoration: bookingData.stageDecoration || 'standard',
     addons: {
@@ -29,21 +29,7 @@ export const createBooking = async (bookingData, pricing) => {
       vegGuests: parseInt(bookingData.vegGuests) || 0,
       nonVegGuests: parseInt(bookingData.nonVegGuests) || 0,
     },
-    pricing: {
-      basePrice: pricing.basePrice,
-      cateringTotal: pricing.cateringTotal,
-      stageAddon: pricing.stageAddon,
-      mediaAddon: pricing.mediaAddon,
-      subtotal: pricing.subtotal,
-      discount: pricing.discount,
-      tax: pricing.tax,
-      total: pricing.total
-    },
-    totalAmount: pricing.total,
-    paidAmount: 0,
     status: 'pending', // pending, confirmed, completed, cancelled
-    paymentStatus: 'unpaid', // unpaid, partially_paid, fully_paid
-    couponCode: bookingData.couponCode || '',
     notes: bookingData.notes || '',
     logs: [
       {

@@ -142,7 +142,7 @@ Please review my request. Thank you!`;
                 <MapPin className="w-4 h-4" />
               </div>
               <div>
-                <p className="text-[10px] text-champagne/45 font-semibold uppercase tracking-wider">Vuyyuru Head Office</p>
+                <p className="text-[10px] text-champagne/45 font-semibold uppercase tracking-wider">Vijayawada Head Office</p>
                 <p className="text-[11px] font-bold text-cream leading-relaxed mt-0.5">
                   {BUSINESS_DETAILS.address}
                 </p>

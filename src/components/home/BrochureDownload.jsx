@@ -24,7 +24,7 @@ const BrochureDownload = () => {
       await createLead({
         name,
         phone,
-        message: 'Downloaded pricing brochure PDF.'
+        message: 'Downloaded event brochure PDF.'
       });
 
       // 2. Trigger brochure download
@@ -56,10 +56,10 @@ const BrochureDownload = () => {
         </div>
         
         <h2 className="font-display text-2xl sm:text-4xl font-extrabold text-ivory mb-3">
-          Download Pricing & Menu Brochure
+          Download Event & Menu Brochure
         </h2>
         <p className="font-body text-xs sm:text-sm text-champagne/70 max-w-xl leading-relaxed mb-8">
-          Get complete details about our royal decorations stages, catering menu platters, pricing sheets, and event guidelines in a downloadable PDF.
+          Get complete details about our royal decorations stages, catering menu platters, and event guidelines in a downloadable PDF.
         </p>
 
         {/* Input parameters */}

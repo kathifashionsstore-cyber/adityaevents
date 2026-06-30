@@ -1,6 +1,4 @@
-// src/components/admin/BookingTable.jsx
 import React from 'react';
-import { formatCurrency } from '../../utils/formatters';
 import { formatDateString } from '../../utils/dateHelpers';
 import Badge from '../common/Badge';
 import Table from '../common/Table';
@@ -34,7 +32,7 @@ const BookingTable = ({ bookings = [], onRefresh }) => {
   }
 
   return (
-    <Table headers={['Booking ID', 'Client Name', 'Event Date', 'Venue', 'Total Value', 'Status', 'Actions']}>
+    <Table headers={['Booking ID', 'Client Name', 'Event Date', 'Venue', 'Event Type', 'Status', 'Actions']}>
       {bookings.map((booking) => (
         <tr key={booking.id}>
           <td className="font-mono text-xs font-bold text-gold">{booking.id || 'N/A'}</td>
@@ -51,7 +49,7 @@ const BookingTable = ({ bookings = [], onRefresh }) => {
             </div>
           </td>
           <td className="text-xs text-champagne/80 truncate max-w-40">{booking.venueName || booking.venue || 'Not specified'}</td>
-          <td className="text-xs font-bold text-champagne">{formatCurrency(booking.totalAmount)}</td>
+          <td className="text-xs capitalize text-champagne/85">{booking.eventType || 'wedding'}</td>
           <td>{getStatusBadge(booking.status)}</td>
           <td>
             <div className="flex items-center space-x-2">

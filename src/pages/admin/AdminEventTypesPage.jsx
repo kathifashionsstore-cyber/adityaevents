@@ -28,7 +28,7 @@ const DEFAULT_EVENT_DETAILS = {
   wedding: {
     title: 'Royal Wedding Ceremonies',
     subtitle: 'A Match Made in Heaven',
-    desc: 'From traditional Telugu mandapams to extravagant designer stages, we craft weddings that resonate with royalty. Our dedicated crew in Vuyyuru manages structural design, fresh floral decor, warm pathway lighting, thematic entrances, and guest pathways. Let us make your special day a celestial memory.',
+    desc: 'From traditional Telugu mandapams to extravagant designer stages, we craft weddings that resonate with royalty. Our dedicated crew in Vijayawada manages structural design, fresh floral decor, warm pathway lighting, thematic entrances, and guest pathways. Let us make your special day a celestial memory.',
     inclusions: [
       'Thematic stage design (traditional or modern)',
       'Fresh flower selection & structural mandapams',
@@ -45,7 +45,7 @@ const DEFAULT_EVENT_DETAILS = {
   catering: {
     title: 'Premium Catering Services',
     subtitle: 'Feast of the Kings',
-    desc: 'Indulge your guests in a gastronomic journey with our premium catering. Serving Vuyyuru, Vijayawada, and surrounding regions, we provide both traditional Andhra vegetarian delicacies and exquisite royal non-vegetarian spreads. Our service team is fully uniformed, and our hygiene standards are impeccable.',
+    desc: 'Indulge your guests in a gastronomic journey with our premium catering. Serving Vijayawada, Vijayawada, and surrounding regions, we provide both traditional Andhra vegetarian delicacies and exquisite royal non-vegetarian spreads. Our service team is fully uniformed, and our hygiene standards are impeccable.',
     inclusions: [
       'Customized multi-cuisine menu options',
       'Uniformed catering and serving staff',

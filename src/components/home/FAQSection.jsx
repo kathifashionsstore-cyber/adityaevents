@@ -10,19 +10,19 @@ const FAQSection = () => {
   const faqs = [
     {
       q: 'Do you charge a flat decoration fee or package rate?',
-      a: 'We offer standardized pricing packages starting from ₹1,50,000 for classic wedding decorations, as well as customizable quotes for clients with bespoke stage needs.'
+      a: 'We offer customizable event packages tailored to your specific requirements, ranging from standard classic setups to bespoke luxury floral designs. Contact us to receive a custom quote.'
     },
     {
       q: 'Is catering included in your decoration packages?',
-      a: 'Catering can be bundled with decoration services. Our catering rates are based per plate: starting from ₹350/plate for vegetarian dishes and ₹550/plate for non-vegetarian menus.'
+      a: 'Catering can be bundled with decoration services. We provide customizable menus, featuring traditional Andhra vegetarian delicacies and royal non-vegetarian spreads, designed to fit your guest list size.'
     },
     {
-      q: 'Do you support events outside Vuyyuru?',
-      a: 'Yes, we handle weddings and banquets throughout Vuyyuru, Vijayawada, Krishna District, and adjacent regions in Andhra Pradesh.'
+      q: 'Do you support events outside Vijayawada?',
+      a: 'Yes, we handle weddings and banquets throughout Vijayawada, Krishna District, and adjacent regions in Andhra Pradesh.'
     },
     {
       q: 'What is your booking cancellation policy?',
-      a: 'We require a 50% advance to confirm slot bookings. Cancellations made 30 days prior to the event date receive a full refund, while later cancellations forfeit the deposit.'
+      a: 'We require an advance deposit to confirm slot bookings. Please consult our event planning team for specific cancellation timelines and refund policies.'
     }
   ];
 

@@ -64,7 +64,7 @@ export const generateReceiptPDF = (paymentData, bookingData) => {
     doc.setTextColor(247, 231, 206); // Champagne (#F7E7CE)
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
-    doc.text('Premium Royal Events & Catering | Vuyyuru, Andhra Pradesh', 48, 26);
+    doc.text('Premium Royal Events & Catering | Vijayawada, Andhra Pradesh', 48, 26);
     doc.text('Call: +91 93932 17676 | Email: info@adithyaevents.com', 48, 32);
 
     // Separator line

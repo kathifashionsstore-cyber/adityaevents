@@ -8,19 +8,14 @@ import { ShieldCheck, Award, Heart, Milestone, Users, Sparkles } from 'lucide-re
 
 const AboutPage = () => {
   const milestones = [
-    { year: '2015', title: 'Founding Year', desc: 'Started with basic stage decorations and tent services in Vuyyuru, Andhra Pradesh.' },
+    { year: '2015', title: 'Founding Year', desc: 'Started with basic stage decorations and tent services in Vijayawada, Andhra Pradesh.' },
     { year: '2018', title: '100+ Weddings Milestone', desc: 'Expanded into premium floral mandapams and custom pathway lighting setups.' },
     { year: '2021', title: 'Gourmet Catering Launch', desc: 'Introduced traditional Andhra veg/non-veg catering services with Master Chef supervision.' },
     { year: '2024', title: 'Pro DJ & Sound Truss', desc: 'Acquired state-of-the-art Dolby audio line-arrays and high-intensity intelligent lights.' },
     { year: '2026', title: 'Adithya Premium v2.0', desc: 'Transitioned into a fully digitized, client-centric premium events coordination engine.' }
   ];
 
-  const team = [
-    { name: 'Chennuru Lokesh', role: 'Founder & Chief Planner', desc: '12+ years designing custom Telugu mandapams and theme reception stages.', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200' },
-    { name: 'Adithya Rao', role: 'Head of Operations', desc: 'Coordinates onsite crews, logistical transport, and schedule timelines in Krishna district.', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200' },
-    { name: 'Chef Prasad', role: 'Master Culinary Chef', desc: 'Supervises preparation of Andhra buffet feasts, hot jalebi stalls, and traditional biryanis.', image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=200' },
-    { name: 'K. Sridhar', role: 'Creative Director', desc: '3D pre-vis model designer creating customized stage backdrop layouts.', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=200' }
-  ];
+
 
   const aboutImages = [
     'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800',
@@ -32,14 +27,14 @@ const AboutPage = () => {
     <PageTransition>
       <SEOHead 
         title="Our Story | Adithya Event Management" 
-        description="The journey of Vuyyuru's premier wedding planner, catering supplier, and custom stage decorator."
+        description="The journey of Vijayawada's premier wedding planner, catering supplier, and custom stage decorator."
       />
       
       {/* Universal Page Hero */}
       <UniversalPageHero
         title="Our Journey"
         subtitle="Adithya Event Management"
-        description="Since 2015, we have been crafting royal Telugu weddings, premium multi-cuisine catering, and professional event experiences in Vuyyuru and adjacent Krishna district sub-regions."
+        description="Since 2015, we have been crafting royal Telugu weddings, premium multi-cuisine catering, and professional event experiences in Vijayawada and adjacent Krishna district sub-regions."
         images={aboutImages}
         breadcrumbs={[{ label: 'About', path: '/about' }]}
       />
@@ -59,7 +54,7 @@ const AboutPage = () => {
                 "Every celebration is a sacred gateway where families welcome forever memories."
               </h2>
               <blockquote className="font-body text-sm text-champagne/80 italic leading-relaxed border-l-2 border-gold pl-4 py-1">
-                "We founded Adithya Event Management in Vuyyuru with a single vision: to eliminate the logistical stress of families during marriages, enabling them to host their guests with pure joy. Over 10 years, our team has built trust by ensuring transparent rates, fresh floral decors, and authentic master chef culinary feasts."
+                "We founded Adithya Event Management in Vijayawada with a single vision: to eliminate the logistical stress of families during marriages, enabling them to host their guests with pure joy. Over 10 years, our team has built trust by ensuring transparent rates, fresh floral decors, and authentic master chef culinary feasts."
               </blockquote>
               <p className="font-display text-sm font-bold text-gold">
                 — Chennuru Lokesh, Founder & Chief Decorator
@@ -116,7 +111,7 @@ const AboutPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="flex flex-col items-center text-center p-8 bg-amethyst/20 border-gold/15" hoverEffect={true}>
               <ShieldCheck className="w-10 h-10 text-gold mb-4" />
-              <h4 className="font-display text-base font-bold text-champagne mb-2">Absolute Pricing Honesty</h4>
+              <h4 className="font-display text-base font-bold text-champagne mb-2">Absolute Quote Integrity</h4>
               <p className="font-body text-xs text-champagne/70 leading-relaxed">
                 We believe in complete trust. Every package is transparently discussed and quoted without hidden transport, labor, or emergency surcharge surprises.
               </p>
@@ -139,39 +134,21 @@ const AboutPage = () => {
             </Card>
           </div>
         </section>
-
-        {/* Team Grid */}
-        <section className="py-16 bg-amethyst/10 border-t border-white/5 px-6">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="flex justify-center text-gold mb-2">
-                <Users className="w-5 h-5" />
-              </div>
-              <h3 className="font-display text-2xl md:text-3xl font-bold text-cream">Meet Our Planners</h3>
-              <p className="font-body text-xs text-gold/80 tracking-widest uppercase mt-1">Hands-on directors of your celebrations</p>
+        {/* Unified Team Block */}
+        <section className="py-20 bg-amethyst/10 border-t border-white/5 px-6">
+          <div className="max-w-3xl mx-auto text-center space-y-6">
+            <div className="flex justify-center text-gold">
+              <Users className="w-8 h-8" />
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {team.map((member, idx) => (
-                <div key={idx} className="bg-velvet border border-white/5 rounded-2xl overflow-hidden shadow-lg flex flex-col text-left group hover:border-gold/30 transition-all duration-300">
-                  <div className="h-44 w-full bg-amethyst/20 overflow-hidden relative">
-                    <img 
-                      src={member.image} 
-                      alt={member.name} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-velvet to-transparent opacity-20" />
-                  </div>
-                  <div className="p-5 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h4 className="font-display text-sm font-bold text-cream">{member.name}</h4>
-                      <span className="font-body text-[10px] text-gold uppercase tracking-wider block mt-0.5">{member.role}</span>
-                      <p className="font-body text-[11px] text-champagne/60 mt-3 leading-relaxed">{member.desc}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <h3 className="font-display text-2xl md:text-3xl font-extrabold text-cream">
+              Backed by a Team of 30+ Dedicated Professionals
+            </h3>
+            <p className="font-body text-xs text-gold/80 tracking-widest uppercase font-semibold animate-pulse">
+              Behind Every Seamless Celebration
+            </p>
+            <p className="font-body text-sm text-champagne/80 leading-relaxed max-w-2xl mx-auto">
+              Our workforce consists of experienced structural decorators, master culinary chefs, creative lighting technicians, and onsite event coordinators. Under Chennuru Lokesh's design supervision, we handle everything from site inspection and floral rigging to buffet service management, ensuring your events are executed with extreme dedication and premium royalty.
+            </p>
           </div>
         </section>
 

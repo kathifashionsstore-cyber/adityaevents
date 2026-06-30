@@ -1,15 +1,14 @@
 // src/components/admin/DashboardCards.jsx
 import React from 'react';
-import { IndianRupee, Users, ClipboardCheck, AlertCircle } from 'lucide-react';
-import { formatCurrency } from '../../utils/formatters';
+import { Calendar, Users, ClipboardCheck, Clock } from 'lucide-react';
 
 const DashboardCards = ({ stats }) => {
   const cards = [
     {
-      title: 'Total Revenue Collected',
-      value: formatCurrency(stats?.totalRevenue || 0),
-      icon: <IndianRupee className="w-5 h-5 text-gold" />,
-      desc: 'Sum of all processed payments'
+      title: 'Total Bookings',
+      value: stats?.totalBookings || 0,
+      icon: <Calendar className="w-5 h-5 text-gold" />,
+      desc: 'All registered inquiries'
     },
     {
       title: 'Active Bookings',
@@ -18,16 +17,16 @@ const DashboardCards = ({ stats }) => {
       desc: 'Confirmed slot listings'
     },
     {
+      title: 'Pending Requests',
+      value: stats?.pendingBookings || 0,
+      icon: <Clock className="w-5 h-5 text-gold" />,
+      desc: 'Slots awaiting review'
+    },
+    {
       title: 'CRM Lead Enquiries',
       value: stats?.totalLeads || 0,
       icon: <Users className="w-5 h-5 text-gold" />,
       desc: 'Contacts requests archived'
-    },
-    {
-      title: 'Operating Expenses',
-      value: formatCurrency(stats?.totalExpenses || 0),
-      icon: <AlertCircle className="w-5 h-5 text-gold" />,
-      desc: 'Logged decorator and staff payouts'
     }
   ];
 

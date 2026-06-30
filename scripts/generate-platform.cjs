@@ -16,10 +16,10 @@ const publicFiles = {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#D4AF37" />
-    <meta name="description" content="Adithya Event Management in Vuyyuru, Andhra Pradesh. Premium weddings, catering, birthdays, corporate events and celebration planning." />
-    <meta name="keywords" content="Adithya Event Management, Vuyyuru events, Vijayawada catering, wedding planner Andhra Pradesh, event management Krishna district" />
+    <meta name="description" content="Adithya Event Management in Vijayawada, Andhra Pradesh. Premium weddings, catering, birthdays, corporate events and celebration planning." />
+    <meta name="keywords" content="Adithya Event Management, Vijayawada events, Vijayawada catering, wedding planner Andhra Pradesh, event management Krishna district" />
     <meta property="og:title" content="Adithya Event Management" />
-    <meta property="og:description" content="Premium event management and catering in Vuyyuru, Andhra Pradesh." />
+    <meta property="og:description" content="Premium event management and catering in Vijayawada, Andhra Pradesh." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://adithyaevents.in" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
@@ -27,7 +27,7 @@ const publicFiles = {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Poppins:wght@300;400;500;600;700&family=Great+Vibes&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    <title>Adithya Event Management | Vuyyuru</title>
+    <title>Adithya Event Management | Vijayawada</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run Adithya Event Management.</noscript>
@@ -37,7 +37,7 @@ const publicFiles = {
   'public/manifest.json': `{
   "short_name": "Adithya Events",
   "name": "Adithya Event Management",
-  "description": "Premium event management and catering in Vuyyuru, Andhra Pradesh.",
+  "description": "Premium event management and catering in Vijayawada, Andhra Pradesh.",
   "icons": [
     { "src": "favicon.ico", "sizes": "64x64 32x32 24x24 16x16", "type": "image/x-icon" },
     { "src": "logo192.png", "type": "image/png", "sizes": "192x192" },
@@ -395,8 +395,8 @@ write('src/utils/constants.js', `export const BRAND = {
   name: 'Adithya Event Management',
   shortName: 'Adithya Events',
   instagram: '@adithya_event_management',
-  location: 'Vuyyuru, Andhra Pradesh, India',
-  serviceArea: 'Vuyyuru, Vijayawada, Krishna District and Andhra Pradesh',
+  location: 'Vijayawada, Andhra Pradesh, India',
+  serviceArea: 'Vijayawada, Vijayawada, Krishna District and Andhra Pradesh',
   phone: '+91 93932 17676',
   whatsapp: '919393217676',
   email: 'hello@adithyaevents.in',
@@ -463,7 +463,7 @@ export const ADD_ONS = [
 
 export const COUPONS = [
   { code: 'ADITHYA10', label: 'Launch offer', type: 'percent', value: 10, active: true },
-  { code: 'VUYURU25K', label: 'Vuyyuru family offer', type: 'flat', value: 25000, active: true }
+  { code: 'VIJAYAWADA25K', label: 'Vijayawada family offer', type: 'flat', value: 25000, active: true }
 ];
 
 export const STATS = [
@@ -492,7 +492,7 @@ export const GALLERY_ITEMS = [
 ];
 
 export const TESTIMONIALS = [
-  { name: 'Lakshmi Prasad', event: 'Wedding in Vuyyuru', rating: 5, text: 'The team handled decor, food and guest flow beautifully. Our family could actually enjoy the day.' },
+  { name: 'Lakshmi Prasad', event: 'Wedding in Vijayawada', rating: 5, text: 'The team handled decor, food and guest flow beautifully. Our family could actually enjoy the day.' },
   { name: 'Sravani K', event: 'Engagement', rating: 5, text: 'Very punctual, transparent pricing and a premium look without last-minute confusion.' },
   { name: 'Ramesh Foods Pvt Ltd', event: 'Corporate meet', rating: 5, text: 'Professional setup, good sound and excellent catering service for our guests.' }
 ];
@@ -506,7 +506,7 @@ export const FAQS = [
 
 export const BLOG_POSTS = [
   { slug: 'telugu-wedding-checklist', title: 'Telugu Wedding Planning Checklist', excerpt: 'A practical planning sequence for families in Krishna district.', date: '2026-02-10' },
-  { slug: 'catering-menu-vuyyuru', title: 'How to Build a Memorable Catering Menu', excerpt: 'Balancing traditional dishes, live counters and guest comfort.', date: '2026-03-04' },
+  { slug: 'catering-menu-vijayawada', title: 'How to Build a Memorable Catering Menu', excerpt: 'Balancing traditional dishes, live counters and guest comfort.', date: '2026-03-04' },
   { slug: 'engagement-decor-ideas', title: 'Premium Engagement Decor Ideas', excerpt: 'Florals, lighting and stage cues that photograph beautifully.', date: '2026-04-22' }
 ];
 
@@ -697,7 +697,7 @@ export function pageSeo(title, description, path = '/') {
   const url = BRAND.siteUrl.replace(/\\/$/, '') + path;
   return {
     title: fullTitle,
-    description: description || 'Premium event management and catering in Vuyyuru, Andhra Pradesh.',
+    description: description || 'Premium event management and catering in Vijayawada, Andhra Pradesh.',
     canonical: url,
     schema: localBusinessSchema(url)
   };
@@ -712,7 +712,7 @@ export function localBusinessSchema(url = BRAND.siteUrl) {
     telephone: BRAND.phone,
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Vuyyuru',
+      addressLocality: 'Vijayawada',
       addressRegion: 'Andhra Pradesh',
       addressCountry: 'IN'
     },
@@ -1606,7 +1606,7 @@ import { BRAND } from '../../utils/constants';
 
 export default function SEOHead({ title, description, canonical, schema }) {
   const pageTitle = title || BRAND.name;
-  const metaDescription = description || 'Premium event management and catering in Vuyyuru, Andhra Pradesh.';
+  const metaDescription = description || 'Premium event management and catering in Vijayawada, Andhra Pradesh.';
   return (
     <Helmet>
       <title>{pageTitle}</title>
@@ -1819,7 +1819,7 @@ export default function HeroSection() {
       <motion.div className="hero-content" initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ type: 'spring', stiffness: 90, damping: 16 }}>
         <span className="script">Celebrations with royal warmth</span>
         <h1>{BRAND.name}</h1>
-        <p>Premium event planning, catering, decor, photography and guest hospitality for families and corporates in Vuyyuru and Vijayawada.</p>
+        <p>Premium event planning, catering, decor, photography and guest hospitality for families and corporates in Vijayawada and Vijayawada.</p>
         <div className="hero-actions">
           <Button icon={Sparkles} onClick={() => { window.location.href = '/book'; }}>Book an Event</Button>
           <Link to="/quote" className="btn btn-outline"><CalendarCheck size={18} /><span>Get Quote</span></Link>
@@ -2719,7 +2719,7 @@ import LiveCountdown from '../../components/home/LiveCountdown';
 import { pageSeo } from '../../utils/seoHelpers';
 
 export default function HomePage() {
-  const seo = pageSeo('Premium Events in Vuyyuru', 'Weddings, catering, birthdays and corporate events by Adithya Event Management.');
+  const seo = pageSeo('Premium Events in Vijayawada', 'Weddings, catering, birthdays and corporate events by Adithya Event Management.');
   return (
     <>
       <SEOHead {...seo} />
@@ -2786,7 +2786,7 @@ export function FAQLanding() {
 `);
 
 const simplePublicPages = {
-  AboutPage: ['About Adithya Events', 'A premium event management and catering company rooted in Vuyyuru.', 'why'],
+  AboutPage: ['About Adithya Events', 'A premium event management and catering company rooted in Vijayawada.', 'why'],
   WeddingPage: ['Wedding Planning', 'Royal mandaps, Telugu rituals, catering and guest hospitality.', 'services'],
   CateringPage: ['Catering Services', 'Authentic Telugu menus, live counters and professional service staff.', 'services'],
   BirthdayPage: ['Birthday Events', 'Theme decor, cake tables, entertainment and joyful food counters.', 'services'],
@@ -2862,7 +2862,7 @@ import AIChatbot from '../../components/chat/AIChatbot';
 import { pageSeo } from '../../utils/seoHelpers';
 
 export default function ContactPage() {
-  return <><SEOHead {...pageSeo('Contact', 'Contact Adithya Event Management in Vuyyuru.')} /><section className="page-hero"><h1>Contact</h1><p>Call, WhatsApp or send an inquiry to plan your event.</p></section><ContactSection /><AIChatbot /></>;
+  return <><SEOHead {...pageSeo('Contact', 'Contact Adithya Event Management in Vijayawada.')} /><section className="page-hero"><h1>Contact</h1><p>Call, WhatsApp or send an inquiry to plan your event.</p></section><ContactSection /><AIChatbot /></>;
 }
 `);
 
@@ -3649,7 +3649,7 @@ async function seedData() {
     name: 'Adithya Event Management',
     phone: '+91 93932 17676',
     instagram: '@adithya_event_management',
-    location: 'Vuyyuru, Andhra Pradesh, India',
+    location: 'Vijayawada, Andhra Pradesh, India',
     updatedAt: admin.firestore.FieldValue.serverTimestamp()
   }, { merge: true });
   console.log('Seed data complete. Add your Firebase admin UID to admins/{uid}.');
@@ -3663,7 +3663,7 @@ seedData().catch((error) => {
 
 write('README.md', `# Adithya Event Management
 
-Premium CRA/PWA implementation for Adithya Event Management, Vuyyuru.
+Premium CRA/PWA implementation for Adithya Event Management, Vijayawada.
 
 ## What is included
 

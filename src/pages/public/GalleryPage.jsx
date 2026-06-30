@@ -31,7 +31,7 @@ const GalleryPage = () => {
       } catch (e) {
         // Fallback default photos
         setPhotos([
-          { src: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400', category: 'wedding', caption: 'Classic Stage Decor Vuyyuru' },
+          { src: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400', category: 'wedding', caption: 'Classic Stage Decor Vijayawada' },
           { src: 'https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=400', category: 'catering', caption: 'Buffet Platter feasts' },
           { src: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=400', category: 'birthday', caption: 'Magical birthday balloon setups' },
           { src: 'https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=400', category: 'corporate', caption: 'Corporate seminar layouts' }

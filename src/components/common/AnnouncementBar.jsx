@@ -6,7 +6,7 @@ import { X, Megaphone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const DEFAULT_ANNOUNCEMENTS = [
-  "✨ Book your Royal Wedding slots now! Special custom decors available for Vuyyuru & surrounding areas.",
+  "✨ Book your Royal Wedding slots now! Special custom decors available for Vijayawada & surrounding areas.",
   "🍲 Treat your guests to our premium Live Buffet Catering spreads.",
   "⚡ High-energy intelligent lighting, LED backdrop wall, and line-array DJ sounds now live!"
 ];

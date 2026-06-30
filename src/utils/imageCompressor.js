@@ -1,27 +1,18 @@
 // src/utils/imageCompressor.js
 
 /**
- * Compress an image file to a maximum of 300KB using Canvas
+ * Compresses an image file using HTML5 Canvas.
  * @param {File} file - Original file object
- * @returns {Promise<{blob: Blob, previewUrl: string, originalSize: number, compressedSize: number}>}
+ * @param {number} maxWidth - Maximum allowed width
+ * @param {number} maxHeight - Maximum allowed height
+ * @param {number} quality - Target JPEG/PNG compression quality (0 to 1)
+ * @returns {Promise<File>} Compressed File object
  */
-export const compressImage = (file) => {
+export const compressImage = (file, maxWidth = 1920, maxHeight = 1080, quality = 0.75) => {
   return new Promise((resolve, reject) => {
-    // If it is not an image, reject
-    if (!file.type.startsWith('image/')) {
-      reject(new Error('File is not an image'));
-      return;
-    }
-    
-    // Skip compression for GIFs since drawing to canvas flattens animations
-    if (file.type === 'image/gif' && file.size / 1024 <= 300) {
-      resolve({
-        blob: file,
-        previewUrl: URL.createObjectURL(file),
-        originalSize: file.size,
-        compressedSize: file.size
-      });
-      return;
+    // If the file is already under 300KB, skip canvas processing
+    if (file.size <= 300 * 1024) {
+      return resolve(file);
     }
 
     const reader = new FileReader();
@@ -31,66 +22,39 @@ export const compressImage = (file) => {
       img.src = event.target.result;
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-
         let width = img.width;
         let height = img.height;
 
-        // Resize rules
-        if (width > 1920) {
-          height = Math.round((height * 1920) / width);
-          width = 1920;
-        } else if (width > 1280) {
-          height = Math.round((height * 1280) / width);
-          width = 1280;
+        // Maintain aspect ratio while checking maximum dimensions
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+        if (height > maxHeight) {
+          width = Math.round((width * maxHeight) / height);
+          height = maxHeight;
         }
 
-        let quality = 0.85;
-        
-        const attemptCompression = (q, w, h) => {
-          canvas.width = w;
-          canvas.height = h;
-          ctx.drawImage(img, 0, 0, w, h);
+        canvas.width = width;
+        canvas.height = height;
 
-          canvas.toBlob((blob) => {
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
             if (!blob) {
-              reject(new Error('Canvas to Blob export failed'));
-              return;
+              return reject(new Error('Canvas compression failed to generate a blob.'));
             }
-
-            const sizeKB = blob.size / 1024;
-            
-            if (sizeKB <= 300) {
-              // Compression successful!
-              resolve({
-                blob,
-                previewUrl: URL.createObjectURL(blob),
-                originalSize: file.size,
-                compressedSize: blob.size,
-              });
-            } else if (q > 0.3) {
-              // Try again with reduced quality
-              attemptCompression(q - 0.05, w, h);
-            } else {
-              // If still too large at quality 0.3, reduce dimensions by 20% and retry
-              const nextWidth = Math.round(w * 0.8);
-              const nextHeight = Math.round(h * 0.8);
-              if (nextWidth < 100 || nextHeight < 100) {
-                // Return what we have if dimensions become too tiny
-                resolve({
-                  blob,
-                  previewUrl: URL.createObjectURL(blob),
-                  originalSize: file.size,
-                  compressedSize: blob.size,
-                });
-              } else {
-                attemptCompression(0.35, nextWidth, nextHeight);
-              }
-            }
-          }, 'image/jpeg', q);
-        };
-
-        attemptCompression(quality, width, height);
+            const compressedFile = new File([blob], file.name, {
+              type: file.type || 'image/jpeg',
+              lastModified: Date.now()
+            });
+            resolve(compressedFile);
+          },
+          file.type || 'image/jpeg',
+          quality
+        );
       };
       img.onerror = (err) => reject(err);
     };

@@ -55,7 +55,6 @@ const AdminLeadsPage = () => {
         customerEmail: lead.email || '',
         eventDate: lead.eventDate || new Date().toISOString().split('T')[0],
         venueName: 'Consultation Scheduled',
-        totalAmount: 0, // pricing hidden from public
         status: 'confirmed',
         createdAt: new Date().toISOString()
       });

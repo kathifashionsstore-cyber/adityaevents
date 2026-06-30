@@ -35,7 +35,7 @@ const BookingTracker = () => {
 
   const steps = [
     { title: 'Inquiry Submitted', statusKey: 'pending', desc: 'Booking request registered in database' },
-    { title: 'Advance Paid', statusKey: 'confirmed', desc: 'Advance deposit cleared and slot reserved' },
+    { title: 'Slot Confirmed', statusKey: 'confirmed', desc: 'Date reserved and verified by team' },
     { title: 'Decor Finalization', statusKey: 'decor_setup', desc: 'Decorators and stage parameters locked' },
     { title: 'Event Celebration', statusKey: 'completed', desc: 'Catering and decorators successfully completed' }
   ];
@@ -44,7 +44,6 @@ const BookingTracker = () => {
     const statusOrder = ['pending', 'confirmed', 'completed'];
     const currentIdx = statusOrder.indexOf(currentStatus);
     
-    // Custom check: if confirmed, we can say stage is confirmed too
     if (currentStatus === 'confirmed' && stepIdx <= 1) return 'completed';
     if (currentStatus === 'completed' && stepIdx <= 3) return 'completed';
     if (currentStatus === 'cancelled') return 'cancelled';
@@ -95,18 +94,23 @@ const BookingTracker = () => {
               </div>
             </div>
 
-            <div className="border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-6 space-y-3 text-right flex flex-col justify-between items-end">
-              <div>
-                <span className="font-body text-[10px] text-champagne/50 block">Payment Balance Status:</span>
-                <Badge status={booking.paymentStatus === 'fully_paid' ? 'success' : 'warning'}>
-                  {booking.paymentStatus.replace('_', ' ').toUpperCase()}
-                </Badge>
-              </div>
-
+            <div className="border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-6 space-y-3 font-body text-xs text-champagne/80">
+              <h5 className="font-display font-semibold text-gold text-xs">Event Customizations</h5>
               <div className="space-y-1">
-                <p className="font-body text-[10px] text-champagne/60">Total Amount: <span className="font-bold text-champagne">{formatCurrency(booking.totalAmount)}</span></p>
-                <p className="font-body text-[10px] text-champagne/60">Paid So Far: <span className="font-bold text-success">{formatCurrency(booking.paidAmount || 0)}</span></p>
-                <p className="font-body text-[10px] text-champagne/60">Remaining Due: <span className="font-bold text-gold">{formatCurrency(booking.totalAmount - (booking.paidAmount || 0))}</span></p>
+                <p><span className="text-champagne/50">Selected Theme:</span> {booking.packageName || 'Custom Decor'}</p>
+                <p><span className="text-champagne/50">Stage Backdrop:</span> <span className="capitalize">{booking.stageDecoration || 'Standard'}</span></p>
+                {booking.catering?.enabled ? (
+                  <p><span className="text-champagne/50">Catering:</span> {booking.catering.vegGuests} Veg, {booking.catering.nonVegGuests} Non-Veg Plates</p>
+                ) : (
+                  <p><span className="text-champagne/50">Catering Service:</span> Not selected</p>
+                )}
+                <p><span className="text-champagne/50">Add-ons:</span> {
+                  Object.keys(booking.addons || {}).filter(k => booking.addons[k]).map(k => {
+                    if (k === 'soundSystemDJ') return 'DJ';
+                    if (k === 'droneFootage') return 'Drone';
+                    return k.charAt(0).toUpperCase() + k.slice(1);
+                  }).join(', ') || 'None'
+                }</p>
               </div>
             </div>
           </Card>

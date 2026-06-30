@@ -1,8 +1,6 @@
-// src/components/booking/PackageSelector.jsx
 import React from 'react';
 import { PACKAGES } from '../../utils/constants';
 import { useCart } from '../../context/CartContext';
-import { formatCurrency } from '../../utils/formatters';
 
 const PackageSelector = ({ onNext }) => {
   const { selectedPackage, setSelectedPackage } = useCart();
@@ -31,7 +29,6 @@ const PackageSelector = ({ onNext }) => {
               }`}
             >
               <h4 className="font-display text-lg font-bold text-champagne">{pkg.name}</h4>
-              <p className="font-display text-xl font-extrabold text-gold mt-2">{formatCurrency(pkg.price)}</p>
               
               <ul className="mt-6 space-y-2.5 text-left">
                 {pkg.features.map((feat, idx) => (

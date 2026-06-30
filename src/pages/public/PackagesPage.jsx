@@ -4,7 +4,6 @@ import PageTransition from '../../components/common/PageTransition';
 import SEOHead from '../../components/common/SEOHead';
 import useAnalytics from '../../hooks/useAnalytics';
 import { PACKAGES } from '../../utils/constants';
-import { formatCurrency } from '../../utils/formatters';
 import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 import Card from '../../components/common/Card';
 import { Check, ArrowRight } from 'lucide-react';
@@ -21,7 +20,7 @@ const PackagesPage = () => {
         {/* Header Title */}
         <div className="text-center mb-16">
           <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-primary mb-2">Event Packages</h1>
-          <p className="font-body text-xs sm:text-sm text-gold tracking-widest uppercase">Royal setups at transparent pricing</p>
+          <p className="font-body text-xs sm:text-sm text-gold tracking-widest uppercase">Royal setups at bespoke themes</p>
         </div>
 
         {/* Packages Grid */}
@@ -33,9 +32,7 @@ const PackagesPage = () => {
                   {pkg.category}
                 </span>
                 <h3 className="font-display text-lg font-bold text-champagne">{pkg.name}</h3>
-                <p className="font-display text-2xl font-extrabold text-gold">
-                  {pkg.price > 1000 ? formatCurrency(pkg.price) : `₹${pkg.price} / plate`}
-                </p>
+                
                 <ul className="space-y-2.5 pt-4">
                   {pkg.features.map((feat, idx) => (
                     <li key={idx} className="font-body text-xs text-champagne/80 flex items-start">
@@ -58,10 +55,10 @@ const PackagesPage = () => {
           ))}
         </div>
 
-        {/* Pricing Notice */}
+        {/* Quote Notice */}
         <div ref={scrollRef} className="reveal-on-scroll bg-white/5 border border-white/5 p-6 rounded-xl text-center">
           <p className="font-body text-xs text-champagne/70 leading-relaxed">
-            * Decor pricing includes stage setups, carpet overlays, spotlight systems, and florist services. Standard 18% GST applies to final invoice quotes.
+            * All packages are fully customizable. Stage backdrop designs can be scaled and tailored to your venue size. Contact our coordinators to get a custom design quotation.
           </p>
         </div>
 

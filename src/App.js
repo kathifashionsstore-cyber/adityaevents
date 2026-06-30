@@ -16,7 +16,7 @@ import { Toaster } from 'react-hot-toast';
 import AIChatbot from './components/chat/AIChatbot';
 import AnnouncementBar from './components/common/AnnouncementBar';
 import MobileBottomNavigation from './components/common/MobileBottomNavigation';
-import PWAInstallBanner from './components/common/PWAInstallBanner';
+import PWAInstallButton from './components/common/PWAInstallButton';
 import FestivalBannerOverlay from './components/common/FestivalBannerOverlay';
 import './styles/globals.css';
 
@@ -60,7 +60,7 @@ const LayoutWrapper = () => {
       {!isAdminRoute && <MobileBottomNavigation />}
       {!isAdminRoute && <FloatingButtons />}
       {!isAdminRoute && <AIChatbot />}
-      {!isAdminRoute && <PWAInstallBanner />}
+      {!isAdminRoute && <PWAInstallButton />}
       {!isAdminRoute && <FestivalBannerOverlay />}
     </>
   );

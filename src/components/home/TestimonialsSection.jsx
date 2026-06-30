@@ -26,7 +26,7 @@ const TestimonialsSection = () => {
           {
             name: 'K. Rajasekhar Reddi',
             role: 'Father of the Bride',
-            quote: 'Adithya Event Management made my daughter’s wedding absolutely magical. The stage decor in Vuyyuru was royal and the food was praised by everyone. Exceeded all our expectations!',
+            quote: 'Adithya Event Management made my daughter’s wedding absolutely magical. The stage decor in Vijayawada was royal and the food was praised by everyone. Exceeded all our expectations!',
             rating: 5
           },
           {

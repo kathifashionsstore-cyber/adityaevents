@@ -25,7 +25,7 @@ const Footer = () => {
             </div>
           </Link>
           <p className="font-body text-xs text-champagne/70 leading-relaxed">
-            Crafting premium celebrations, exquisite decors, and traditional gourmet feasts across Vuyyuru, Vijayawada, and Krishna District since 2015.
+            Crafting premium celebrations, exquisite decors, and traditional gourmet feasts across Vijayawada, Vijayawada, and Krishna District since 2015.
           </p>
           <div className="flex space-x-4 pt-2">
             <a
@@ -53,9 +53,9 @@ const Footer = () => {
           <ul className="space-y-3 font-body text-xs text-champagne/80">
             <li><Link to="/about" className="hover:text-gold transition-colors">About History</Link></li>
             <li><Link to="/services" className="hover:text-gold transition-colors">Services Tiers</Link></li>
-            <li><Link to="/packages" className="hover:text-gold transition-colors">Pricing Packages</Link></li>
+            <li><Link to="/packages" className="hover:text-gold transition-colors">Theme Packages</Link></li>
             <li><Link to="/gallery" className="hover:text-gold transition-colors">Real Event Gallery</Link></li>
-            <li><Link to="/contact" className="hover:text-gold transition-colors">Get Free Quote</Link></li>
+            <li><Link to="/contact" className="hover:text-gold transition-colors">Plan Your Event</Link></li>
           </ul>
         </div>
 

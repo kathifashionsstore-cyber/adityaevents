@@ -266,7 +266,7 @@ const LoadingScreen = ({ onComplete }) => {
                   marginBottom: '48px',
                 }}
               >
-                Vuyyuru • Andhra Pradesh
+                Vijayawada • Andhra Pradesh
               </motion.p>
             )}
           </AnimatePresence>

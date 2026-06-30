@@ -6,14 +6,12 @@ export const BUSINESS_DETAILS = {
   phone: '+919393217676',
   whatsapp: '+919393217676',
   email: 'info@adithyaevents.com',
-  address: 'Near Main Road, Vuyyuru, Krishna District, Andhra Pradesh, 521165',
-  city: 'Vuyyuru',
+  address: 'Near Main Road, Vijayawada, Krishna District, Andhra Pradesh, 521165',
+  city: 'Vijayawada',
   district: 'Krishna',
   state: 'Andhra Pradesh',
   country: 'India'
 };
-
-export const TAX_RATE = 0.18; // 18% GST
 
 export const EVENT_TYPES = [
   { id: 'wedding', label: 'Wedding / Marriage' },
@@ -29,7 +27,6 @@ export const PACKAGES = [
     id: 'wedding-classic',
     category: 'wedding',
     name: 'Royal Classic Wedding',
-    price: 150000,
     features: [
       'Standard Stage Decoration (up to 20ft)',
       'Traditional Mandapam Setup',
@@ -42,8 +39,7 @@ export const PACKAGES = [
   {
     id: 'wedding-royal',
     category: 'wedding',
-    name: 'Vuyyuru Royal Wedding',
-    price: 300000,
+    name: 'Vijayawada Royal Wedding',
     features: [
       'Grand Stage Decoration (up to 40ft)',
       'Royal Floral Mandapam decoration',
@@ -58,7 +54,6 @@ export const PACKAGES = [
     id: 'wedding-imperial',
     category: 'wedding',
     name: 'Imperial Andhra Wedding',
-    price: 600000,
     features: [
       'Luxurious Theme Stage Decoration (unlimited size)',
       'Exquisite Fresh flower selection (imported roses, jasmine)',
@@ -75,11 +70,10 @@ export const PACKAGES = [
     id: 'catering-veg-basic',
     category: 'catering',
     name: 'Traditional Veg Delight',
-    price: 350, // Per plate
     features: [
       '2 Starters, 1 Sweet, 2 Special Rice, 1 Roti',
       '3 Traditional Andhra Curries, Pappu, Pacchadi',
-      'Vuyyuru special Sambar, Rasam, Curd, Papads',
+      'Vijayawada special Sambar, Rasam, Curd, Papads',
       'Mineral Water glasses & buffet counter design',
       'Standard catering service staff'
     ]
@@ -88,11 +82,10 @@ export const PACKAGES = [
     id: 'catering-nonveg-premium',
     category: 'catering',
     name: 'Royal Non-Veg Feast',
-    price: 550, // Per plate
     features: [
       '2 Veg Starters, 2 Chicken Starters',
       'Andhra Chicken Biryani & Premium Basmati Veg Biryani',
-      'Gongura Mutton curry / Nellore Nellore Fish pulusu',
+      'Gongura Mutton curry / Nellore Fish pulusu',
       '2 Traditional Sweets, Hot Jalebi Counter',
       'Ice-cream, Paan Stall, Mineral water bottles',
       'Premium layout with uniformed serving staff'
@@ -104,7 +97,6 @@ export const PACKAGES = [
     id: 'birthday-magic',
     category: 'birthday',
     name: 'Magic Theme Birthday',
-    price: 25000,
     features: [
       'Theme Balloon Arch setup',
       'Happy Birthday cutout with LED lights',
@@ -117,7 +109,6 @@ export const PACKAGES = [
     id: 'birthday-princess',
     category: 'birthday',
     name: 'Grand Princess / Jungle Theme',
-    price: 65000,
     features: [
       'Large thematic 3D backdrop',
       'Premium balloon columns & LED name board',
@@ -130,8 +121,8 @@ export const PACKAGES = [
 ];
 
 export const ADDONS = {
-  photography: { name: 'Professional Candid Photography', price: 15000 },
-  videography: { name: 'Full HD Traditional Videography', price: 20000 },
-  droneFootage: { name: '4K Aerial Drone Coverage', price: 10000 },
-  soundSystemDJ: { name: 'Premium DJ Sound & Dancefloor Lighting', price: 12000 }
+  photography: { name: 'Professional Candid Photography' },
+  videography: { name: 'Full HD Traditional Videography' },
+  droneFootage: { name: '4K Aerial Drone Coverage' },
+  soundSystemDJ: { name: 'Premium DJ Sound & Dancefloor Lighting' }
 };

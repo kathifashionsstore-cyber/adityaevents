@@ -5,8 +5,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useAdmin } from '../../context/AdminContext';
 import { HERO_BANNER_PAGES } from '../../utils/heroBannerPages';
 import { 
-  LayoutDashboard, Calendar, Users, IndianRupee, FileText, 
-  Settings, LogOut, Ticket, Image, HelpCircle, Shield, Bell, ImagePlus, Sparkles, Megaphone
+  LayoutDashboard, Calendar, Users, Settings, LogOut, Image, 
+  HelpCircle, Shield, Bell, ImagePlus, Sparkles, Megaphone, Layers, Star, Briefcase
 } from 'lucide-react';
 
 const AdminSidebar = () => {
@@ -20,18 +20,18 @@ const AdminSidebar = () => {
     { path: '/admin/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
     { path: '/admin/bookings', label: 'Bookings', icon: <Calendar className="w-4 h-4" /> },
     { path: '/admin/leads', label: 'CRM Leads', icon: <Users className="w-4 h-4" /> },
-    { path: '/admin/payments', label: 'Payments', icon: <IndianRupee className="w-4 h-4" /> },
-    { path: '/admin/expenses', label: 'Expenses', icon: <FileText className="w-4 h-4" /> },
     { path: '/admin/notifications', label: 'Notifications', icon: <Bell className="w-4 h-4" /> },
     { path: '/admin/settings', label: 'Settings', icon: <Settings className="w-4 h-4" /> },
   ];
 
   const contentItems = [
     { path: '/admin/hero-banners', label: 'Hero Banners', icon: <ImagePlus className="w-4 h-4" /> },
+    { path: '/admin/hero-slider', label: 'Home Hero Slider', icon: <Layers className="w-4 h-4" /> },
     { path: '/admin/gallery', label: 'Gallery', icon: <Image className="w-4 h-4" /> },
-    { path: '/admin/faq', label: 'Manage FAQ', icon: <HelpCircle className="w-4 h-4" /> },
-    { path: '/admin/coupons', label: 'Coupons', icon: <Ticket className="w-4 h-4" /> },
+    { path: '/admin/services', label: 'Services Catalog', icon: <Briefcase className="w-4 h-4" /> },
     { path: '/admin/event-types', label: 'Event Customizer', icon: <Sparkles className="w-4 h-4" /> },
+    { path: '/admin/google-reviews', label: 'Google Reviews', icon: <Star className="w-4 h-4" /> },
+    { path: '/admin/faq', label: 'Manage FAQ', icon: <HelpCircle className="w-4 h-4" /> },
     { path: '/admin/marketing', label: 'Marketing Options', icon: <Megaphone className="w-4 h-4" /> },
   ];
 

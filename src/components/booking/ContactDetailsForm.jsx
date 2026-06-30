@@ -38,10 +38,10 @@ const ContactDetailsForm = ({ onNext, onPrev }) => {
   };
 
   const addonsList = [
-    { id: 'photography', label: 'Candid Photography', icon: <Camera className="w-5 h-5" />, desc: 'Traditional & Candid photos (+₹15,000)' },
-    { id: 'videography', label: 'Cinematic Videography', icon: <Video className="w-5 h-5" />, desc: 'Teasers & Wedding films (+₹20,000)' },
-    { id: 'droneFootage', label: 'Aerial Drone 4K', icon: <Wind className="w-5 h-5" />, desc: '4K drone coverage (+₹10,000)' },
-    { id: 'soundSystemDJ', label: 'DJ System & Dancefloor', icon: <Music className="w-5 h-5" />, desc: 'Premium audio & LED dance floor (+₹12,000)' }
+    { id: 'photography', label: 'Candid Photography', icon: <Camera className="w-5 h-5" />, desc: 'Traditional & Candid photo coverage' },
+    { id: 'videography', label: 'Cinematic Videography', icon: <Video className="w-5 h-5" />, desc: 'Teasers & Wedding films editing' },
+    { id: 'droneFootage', label: 'Aerial Drone 4K', icon: <Wind className="w-5 h-5" />, desc: '4K aerial drone coverage' },
+    { id: 'soundSystemDJ', label: 'DJ System & Dancefloor', icon: <Music className="w-5 h-5" />, desc: 'Premium audio & LED dance floor setup' }
   ];
 
   return (
