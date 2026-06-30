@@ -3,69 +3,80 @@
   --header-height: 80px;
   --sidebar-width: 260px;
   --max-width: 1280px;
+
+  /* Rose Gold Premium Core Palette */
+  --primary-rose:        #C76D7A;   /* Primary Rose — main brand color, buttons, links, headings accents */
+  --secondary-rose-gold: #EBB4A0;   /* Secondary Rose Gold — secondary buttons, soft accents */
+  --background:          #FFFBF7;   /* Background — main light page background */
+  --surface:             #FFFFFF;   /* Surface — card backgrounds */
+  --dark-section:        #3B2F2F;   /* Dark Section — footer, dark CTA bands, navbar-on-scroll */
+  --accent-gold:         #D4AF37;   /* Accent Gold — premium highlights, badges, dividers */
+  --text-primary:        #2D2D2D;   /* Text Primary — main body/heading text on light backgrounds */
+  --text-secondary:      #6B7280;   /* Text Secondary — muted/supporting text */
+  --success:             #22C55E;   /* Success — confirmations, success toasts/badges */
+
+  --gradient-primary:    linear-gradient(135deg, #C76D7A 0%, #EBB4A0 100%);
+  --gradient-dark:       linear-gradient(135deg, #3B2F2F 0%, #2A2020 100%);
+  --gradient-gold:       linear-gradient(135deg, #D4AF37 0%, #EBB4A0 100%);
+  --shadow-rose:         rgba(199, 109, 122, 0.25);
+  --glass-bg:            rgba(255, 255, 255, 0.85);
+  --border-soft:         rgba(199, 109, 122, 0.18);
+
+  /* Legacy Variable Bindings to map old code to new theme seamlessly */
+  --gold:                var(--accent-gold);
+  --deep-gold:           var(--primary-rose);
+  --rich-gold:           var(--secondary-rose-gold);
+  --champagne:           var(--secondary-rose-gold);
+  --rose-gold:           var(--secondary-rose-gold);
+
+  --bg-hero:             var(--background);
+  --bg-dark-section:     var(--dark-section);
+  --bg-mid:              var(--background);
+  --bg-light:            var(--background);
+  --bg-card-light:       var(--surface);
+  --bg-card-dark:        var(--surface);
+  --bg-warm:             var(--background);
+
+  --burgundy:            var(--primary-rose);
+  --coral:               #FF6B6B;
+  --emerald:             var(--success);
+  --teal:                var(--primary-rose);
+  --sapphire:            var(--primary-rose);
+  --ivory:               var(--background);
+  --warm-white:          var(--background);
+
+  --gradient-hero:         var(--gradient-primary);
+  --gradient-gold:         var(--gradient-gold);
+  --gradient-purple-gold:  var(--gradient-primary);
+  --gradient-warm:         var(--gradient-primary);
+  --gradient-section-dark: var(--gradient-dark);
+  --gradient-card:         var(--gradient-primary);
+
+  --text-on-dark:        #FFFFFF;
+  --text-on-light:       var(--text-primary);
+  --text-gold:           var(--primary-rose);
+  --text-muted:          var(--text-secondary);
+
+  --shadow-sm:           0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md:           0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg:           0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl:           0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   
-  /* PRIMARY — Royal Gold Tones */
-  --gold:           #D4AF37;   /* Royal Gold */
-  --deep-gold:      #B8860B;   /* Dark Goldenrod */
-  --rich-gold:      #FFD700;   /* Pure Gold */
-  --champagne:      #F7E7CE;   /* Soft Champagne */
-  --rose-gold:      #E8B4A0;   /* Rose Gold */
-
-  /* BACKGROUNDS — Warm, Inviting, NOT Black */
-  --bg-hero:        #1C0A2E;   /* Deep Velvet Purple (NOT black) */
-  --bg-dark-section:#2D1B4E;   /* Dark Amethyst */
-  --bg-mid:         #3D2464;   /* Royal Purple */
-  --bg-light:       #FDF8F0;   /* Warm Ivory */
-  --bg-card-light:  #FFFFFF;   /* Pure White */
-  --bg-card-dark:   #3A1F5C;   /* Deep Purple Card */
-  --bg-warm:        #FFF9F0;   /* Warm Cream */
-
-  /* ACCENTS */
-  --burgundy:       #722F37;   /* Deep Burgundy */
-  --coral:          #FF6B6B;   /* Coral (error states) */
-  --emerald:        #2ECC71;   /* Success Green */
-  --teal:           #1ABC9C;   /* Teal Accent */
-  --sapphire:       #3498DB;   /* Sapphire Blue */
-  --ivory:          #FFFFF0;   /* Ivory White */
-  --warm-white:     #FDF8F0;   /* Warm Background */
-
-  /* GRADIENTS */
-  --gradient-hero:       linear-gradient(135deg, #1C0A2E 0%, #3D2464 50%, #6B2FA0 100%);
-  --gradient-gold:       linear-gradient(135deg, #D4AF37 0%, #FFD700 50%, #B8860B 100%);
-  --gradient-purple-gold: linear-gradient(135deg, #3D2464 0%, #6B2FA0 40%, #D4AF37 100%);
-  --gradient-warm:       linear-gradient(135deg, #FFF9F0 0%, #F7E7CE 100%);
-  --gradient-section-dark: linear-gradient(180deg, #2D1B4E 0%, #1C0A2E 100%);
-  --gradient-card:       linear-gradient(145deg, rgba(212,175,55,0.1) 0%, rgba(107,47,160,0.1) 100%);
-
-  /* TEXT COLORS */
-  --text-on-dark:   #F7E7CE;   /* Champagne on dark backgrounds */
-  --text-on-light:  #2C1B4E;   /* Deep purple on light backgrounds */
-  --text-gold:      #D4AF37;   /* Gold for headings */
-  --text-muted:     #9E8BBB;   /* Muted purple-grey */
-
-  /* SHADOWS */
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-gold-sm:      0 2px 8px var(--shadow-rose);
+  --shadow-gold-md:      0 4px 12px var(--shadow-rose);
+  --shadow-gold-lg:      0 10px 25px var(--shadow-rose);
+  --shadow-gold:         var(--shadow-rose);
+  --shadow-purple:       var(--shadow-rose);
   
-  --shadow-gold-sm: 0 2px 8px rgba(212, 175, 55, 0.15);
-  --shadow-gold-md: 0 4px 12px rgba(212, 175, 55, 0.25);
-  --shadow-gold-lg: 0 10px 25px rgba(212, 175, 55, 0.35);
-  --shadow-gold:    rgba(212, 175, 55, 0.35);
-  --shadow-purple:  rgba(107, 47, 160, 0.25);
-  
-  /* GLASSMORPHISM */
-  --glass-bg-dark:  rgba(61, 36, 100, 0.4);
-  --glass-bg-light: rgba(255, 255, 255, 0.75);
-  --glass-border:   rgba(212, 175, 55, 0.25);
-  --glass-bg:       rgba(255, 255, 255, 0.08);
+  --glass-bg-dark:       rgba(255, 255, 255, 0.8);
+  --glass-bg-light:      rgba(255, 255, 255, 0.85);
+  --glass-border:        var(--border-soft);
 
-  --z-back: -10;
-  --z-normal: 1;
-  --z-dropdown: 50;
-  --z-header: 100;
-  --z-modal: 500;
-  --z-toast: 1000;
-  --z-loading: 9999;
+  --z-back:              -10;
+  --z-normal:            1;
+  --z-dropdown:          50;
+  --z-header:            100;
+  --z-modal:             500;
+  --z-toast:             1000;
+  --z-loading:           9999;
 }

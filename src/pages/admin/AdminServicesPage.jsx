@@ -8,9 +8,8 @@ import Spinner from '../../components/common/Spinner';
 import Badge from '../../components/common/Badge';
 import toast from 'react-hot-toast';
 import { subscribeServicesCatalog, createServiceItem, updateServiceItem, deleteServiceItem, reorderServiceItems } from '../../services/servicesCatalogService';
-import { uploadFile } from '../../services/storageService';
-import { compressImage } from '../../utils/imageCompressor';
-import { Plus, Trash2, Edit2, MoveUp, MoveDown, ToggleLeft, ToggleRight, X, Image as ImageIcon, Star } from 'lucide-react';
+import ImageUploadWithCompressor from '../../components/common/ImageUploadWithCompressor';
+import { Plus, Trash2, Edit2, MoveUp, MoveDown, ToggleLeft, ToggleRight, X, Star } from 'lucide-react';
 
 const CATEGORIES = [
   'Stage Decor',
@@ -34,7 +33,6 @@ const AdminServicesPage = () => {
   const [description, setDescription] = useState('');
   const [inclusionInput, setInclusionInput] = useState('');
   const [inclusions, setInclusions] = useState([]);
-  const [selectedFile, setSelectedFile] = useState(null);
   const [currentImageUrl, setCurrentImageUrl] = useState('');
   const [isActive, setIsActive] = useState(true);
   const [isFeatured, setIsFeatured] = useState(false);
@@ -61,7 +59,6 @@ const AdminServicesPage = () => {
     setDescription('');
     setInclusionInput('');
     setInclusions([]);
-    setSelectedFile(null);
     setCurrentImageUrl('');
     setIsActive(true);
     setIsFeatured(false);
@@ -75,7 +72,6 @@ const AdminServicesPage = () => {
     setDescription(srv.description || '');
     setInclusionInput('');
     setInclusions(srv.inclusions || []);
-    setSelectedFile(null);
     setCurrentImageUrl(srv.imageUrl || '');
     setIsActive(srv.isActive !== false);
     setIsFeatured(!!srv.isFeatured);
@@ -92,35 +88,15 @@ const AdminServicesPage = () => {
     setInclusions(prev => prev.filter((_, i) => i !== idx));
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (file.size > 3 * 1024 * 1024) {
-      toast.error('File size exceeds the 3MB limit.');
-      e.target.value = '';
-      return;
-    }
-    setSelectedFile(file);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedFile && !currentImageUrl) {
+    if (!currentImageUrl) {
       toast.error('Please upload a cover image.');
       return;
     }
-
+ 
     setSaving(true);
-    let imageUrl = currentImageUrl;
-
     try {
-      if (selectedFile) {
-        toast.loading('Compressing cover image...', { id: 'serviceUpload' });
-        const compressed = await compressImage(selectedFile, 800, 600, 0.75); // catalog previews can be smaller resolution
-        imageUrl = await uploadFile(compressed, `services/${Date.now()}_${selectedFile.name}`);
-      }
-
       const srvData = {
         name,
         category,
@@ -128,12 +104,12 @@ const AdminServicesPage = () => {
         inclusions,
         isActive,
         isFeatured,
-        imageUrl,
+        imageUrl: currentImageUrl,
         displayOrder: editingId ? (services.find(s => s.id === editingId)?.displayOrder || 1) : (services.length + 1)
       };
-
+ 
       toast.loading(editingId ? 'Updating service...' : 'Creating service...', { id: 'serviceUpload' });
-
+ 
       if (editingId) {
         await updateServiceItem(editingId, srvData);
         toast.success('Service updated successfully!', { id: 'serviceUpload' });
@@ -288,26 +264,18 @@ const AdminServicesPage = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
                 {/* File upload */}
-                <div className="space-y-2">
+                <div className="space-y-2 col-span-1">
                   <span className="font-body text-[10px] text-champagne/50 uppercase tracking-widest block font-semibold">
                     Cover Preview Graphic
                   </span>
-                  <div className="flex items-center space-x-3">
-                    <label className="flex items-center justify-center border border-white/10 hover:border-gold/30 rounded-lg p-3 bg-white/5 cursor-pointer text-xs text-champagne/80 font-body transition-colors">
-                      <ImageIcon className="w-4 h-4 mr-2 text-gold" />
-                      <span>Upload cover</span>
-                      <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
-                    </label>
-                    {selectedFile && (
-                      <span className="font-mono text-[10px] text-success truncate max-w-40 font-semibold">
-                        {selectedFile.name}
-                      </span>
-                    )}
-                  </div>
+                  <ImageUploadWithCompressor 
+                    onUploadSuccess={(url) => setCurrentImageUrl(url)}
+                    currentImageUrl={currentImageUrl}
+                  />
                 </div>
 
                 {/* Active Toggle */}
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-3 col-span-1">
                   <span className="font-body text-[10px] text-champagne/50 uppercase tracking-widest block font-semibold">
                     Active Catalog:
                   </span>
@@ -317,7 +285,7 @@ const AdminServicesPage = () => {
                 </div>
 
                 {/* Featured Toggle */}
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-3 col-span-1">
                   <span className="font-body text-[10px] text-champagne/50 uppercase tracking-widest block font-semibold">
                     Homepage Featured:
                   </span>
@@ -326,15 +294,6 @@ const AdminServicesPage = () => {
                   </button>
                 </div>
               </div>
-
-              {currentImageUrl && (
-                <div className="pt-2">
-                  <span className="font-body text-[10px] text-champagne/50 uppercase tracking-widest block font-semibold mb-2">
-                    Current Loaded Preview:
-                  </span>
-                  <img src={currentImageUrl} alt="Current preview" className="h-28 w-44 rounded-lg object-cover border border-white/10" />
-                </div>
-              )}
 
               <div className="flex justify-end space-x-3 pt-4 border-t border-white/5">
                 <Button type="button" onClick={() => setFormOpen(false)} variant="outline" className="px-6 py-2 text-xs font-semibold">

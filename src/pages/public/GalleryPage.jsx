@@ -18,9 +18,11 @@ const GalleryPage = () => {
   useEffect(() => {
     const fetchPhotos = async () => {
       let q = collection(db, 'gallery');
+      let constraints = [where('isActive', '==', true)];
       if (activeFilter !== 'all') {
-        q = query(q, where('category', '==', activeFilter));
+        constraints.push(where('category', '==', activeFilter));
       }
+      q = query(q, ...constraints);
       try {
         const snap = await getDocs(q);
         const list = [];

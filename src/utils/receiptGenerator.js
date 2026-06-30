@@ -1,40 +1,54 @@
 // src/utils/receiptGenerator.js
 import { jsPDF } from 'jspdf';
-import { formatCurrency } from './formatters';
+import { formatCurrency } from './currencyFormatter';
 
-// Helper to draw a vector QR code block synchronously
+// Helper to safely extract live CSS variables from DOM
+const getCSSVarColor = (varName, defaultVal) => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return defaultVal;
+  const value = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  return value || defaultVal;
+};
+
+// Helper to convert hex colors to RGB format arrays
+const hexToRgb = (hex, defaultRgb) => {
+  if (!hex) return defaultRgb;
+  const cleanHex = hex.replace('#', '');
+  if (cleanHex.length === 3) {
+    const r = parseInt(cleanHex[0] + cleanHex[0], 16);
+    const g = parseInt(cleanHex[1] + cleanHex[1], 16);
+    const b = parseInt(cleanHex[2] + cleanHex[2], 16);
+    return [r, g, b];
+  }
+  if (cleanHex.length === 6) {
+    const r = parseInt(cleanHex.substring(0, 2), 16);
+    const g = parseInt(cleanHex.substring(2, 4), 16);
+    const b = parseInt(cleanHex.substring(4, 6), 16);
+    return [r, g, b];
+  }
+  return defaultRgb;
+};
+
+// Mock QR Draw function
 const drawQRVerificationBlock = (doc, x, y, size) => {
-  // Outer frame
-  doc.setDrawColor(45, 27, 78); // Amethyst
-  doc.setLineWidth(0.8);
-  doc.rect(x, y, size, size);
-
-  // Position detection patterns (Top Left, Top Right, Bottom Left)
-  const drawFinderPattern = (px, py) => {
-    doc.setFillColor(45, 27, 78);
-    doc.rect(px, py, 6, 6, 'F');
-    doc.setFillColor(255, 255, 255);
-    doc.rect(px + 1, py + 1, 4, 4, 'F');
-    doc.setFillColor(45, 27, 78);
-    doc.rect(px + 2, py + 2, 2, 2, 'F');
-  };
-
-  drawFinderPattern(x + 1.5, y + 1.5); // Top Left
-  drawFinderPattern(x + size - 7.5, y + 1.5); // Top Right
-  drawFinderPattern(x + 1.5, y + size - 7.5); // Bottom Left
-
-  // Simulated QR data blocks
-  doc.setFillColor(45, 27, 78);
-  doc.rect(x + 9, y + 2, 2, 1, 'F');
-  doc.rect(x + 12, y + 3, 2, 2, 'F');
-  doc.rect(x + 9, y + 6, 4, 1.5, 'F');
-  doc.rect(x + 2, y + 9, 3, 2, 'F');
-  doc.rect(x + 7, y + 9, 2, 4, 'F');
-  doc.rect(x + 10, y + 12, 3, 2, 'F');
-  doc.rect(x + 14, y + 9, 2, 5, 'F');
-  doc.rect(x + 2, y + 15, 2, 2, 'F');
-  doc.rect(x + 11, y + 15, 4, 1.5, 'F');
-  doc.rect(x + 6, y + 15, 3, 1, 'F');
+  doc.setFillColor(40, 40, 40);
+  doc.rect(x, y, size, size, 'F');
+  doc.setFillColor(255, 255, 255);
+  doc.rect(x + 2, y + 2, size - 4, size - 4, 'F');
+  
+  doc.setFillColor(40, 40, 40);
+  doc.rect(x + 3, y + 3, 5, 5, 'F');
+  doc.rect(x + size - 8, y + 3, 5, 5, 'F');
+  doc.rect(x + 3, y + size - 8, 5, 5, 'F');
+  
+  doc.setFillColor(255, 255, 255);
+  doc.rect(x + 4, y + 4, 3, 3, 'F');
+  doc.rect(x + size - 7, y + 4, 3, 3, 'F');
+  doc.rect(x + 4, y + size - 7, 3, 3, 'F');
+  
+  doc.setFillColor(40, 40, 40);
+  doc.rect(x + 5, y + 5, 1, 1, 'F');
+  doc.rect(x + size - 6, y + 5, 1, 1, 'F');
+  doc.rect(x + 5, y + size - 6, 1, 1, 'F');
 };
 
 export const generateReceiptPDF = (paymentData, bookingData) => {
@@ -44,11 +58,21 @@ export const generateReceiptPDF = (paymentData, bookingData) => {
   const buildPdf = () => {
     const doc = new jsPDF();
 
-    // Header banner - Deep Amethyst background (#1C0A2E / rgb(28, 10, 46))
-    doc.setFillColor(28, 10, 46);
+    const primaryColorHex = getCSSVarColor('--primary-rose', '#C76D7A');
+    const secondaryColorHex = getCSSVarColor('--secondary-rose-gold', '#EBB4A0');
+    const darkSectionHex = getCSSVarColor('--dark-section', '#3B2F2F');
+    const accentGoldHex = getCSSVarColor('--accent-gold', '#D4AF37');
+
+    const primaryRgb = hexToRgb(primaryColorHex, [199, 109, 122]);
+    const secondaryRgb = hexToRgb(secondaryColorHex, [235, 180, 160]);
+    const darkRgb = hexToRgb(darkSectionHex, [59, 47, 47]);
+    const accentRgb = hexToRgb(accentGoldHex, [212, 175, 55]);
+
+    // Header banner - Deep Amethyst background
+    doc.setFillColor(darkRgb[0], darkRgb[1], darkRgb[2]);
     doc.rect(0, 0, 210, 42, 'F');
 
-    // Inject Logo (WebP or PNG image format fallback)
+    // Inject Logo
     try {
       doc.addImage(logoImg, 'WEBP', 15, 6, 28, 28);
     } catch (e) {
@@ -56,24 +80,24 @@ export const generateReceiptPDF = (paymentData, bookingData) => {
     }
 
     // Company Header Text
-    doc.setTextColor(212, 175, 55); // Royal Gold (#D4AF37)
+    doc.setTextColor(accentRgb[0], accentRgb[1], accentRgb[2]);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(20);
     doc.text('ADITHYA EVENT MANAGEMENT', 48, 18);
 
-    doc.setTextColor(247, 231, 206); // Champagne (#F7E7CE)
+    doc.setTextColor(secondaryRgb[0], secondaryRgb[1], secondaryRgb[2]);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
     doc.text('Premium Royal Events & Catering | Vijayawada, Andhra Pradesh', 48, 26);
     doc.text('Call: +91 93932 17676 | Email: info@adithyaevents.com', 48, 32);
 
     // Separator line
-    doc.setDrawColor(212, 175, 55); // Gold
+    doc.setDrawColor(accentRgb[0], accentRgb[1], accentRgb[2]);
     doc.setLineWidth(1);
     doc.line(0, 42, 210, 42);
 
     // Invoice Title
-    doc.setTextColor(28, 10, 46); // Deep Amethyst
+    doc.setTextColor(darkRgb[0], darkRgb[1], darkRgb[2]);
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
     doc.text('OFFICIAL PAYMENT RECEIPT', 15, 54);
@@ -86,7 +110,7 @@ export const generateReceiptPDF = (paymentData, bookingData) => {
     doc.text(`Payment Ref ID: ${paymentData.transactionId || 'N/A'}`, 140, 64);
 
     // Border separator
-    doc.setDrawColor(212, 175, 55, 0.4); // Gold border opacity
+    doc.setDrawColor(primaryRgb[0], primaryRgb[1], primaryRgb[2]);
     doc.line(15, 70, 195, 70);
 
     // Split view Customer / Event info
@@ -126,12 +150,12 @@ export const generateReceiptPDF = (paymentData, bookingData) => {
     doc.setFont('helvetica', 'normal');
     doc.text(`Advance / Installment payment for Booking ID: ${bookingData.id}`, 15, 117);
     
-    // Status text in success green color (rgb 46, 204, 113)
+    // Status text in success green
     doc.setTextColor(46, 204, 113);
     doc.setFont('helvetica', 'bold');
     doc.text('PAID (Razorpay)', 105, 117);
     
-    doc.setTextColor(28, 10, 46);
+    doc.setTextColor(darkRgb[0], darkRgb[1], darkRgb[2]);
     doc.setFont('helvetica', 'normal');
     doc.text(formatCurrency(paymentData.amount), 180, 117, { align: 'right' });
 
@@ -153,7 +177,7 @@ export const generateReceiptPDF = (paymentData, bookingData) => {
     const balance = bookingData.totalAmount - paidSoFar;
 
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(45, 27, 78); // Amethyst
+    doc.setTextColor(primaryRgb[0], primaryRgb[1], primaryRgb[2]);
     doc.text('REMAINING BALANCE DUE:', 110, 149);
     doc.text(formatCurrency(balance > 0 ? balance : 0), 180, 149, { align: 'right' });
 
@@ -174,7 +198,7 @@ export const generateReceiptPDF = (paymentData, bookingData) => {
     doc.text('This is a computer-generated tax invoice and receipt. No physical signature is required.', 105, 196, { align: 'center' });
     doc.text('Contact +91 93932 17676 for billing inquiries.', 105, 201, { align: 'center' });
 
-    // Save the receipt
+    // Save PDF
     doc.save(`Adithya_Events_Receipt_${paymentData.receiptNo}.pdf`);
   };
 
@@ -183,6 +207,6 @@ export const generateReceiptPDF = (paymentData, bookingData) => {
     buildPdf();
   } else {
     logoImg.onload = buildPdf;
-    logoImg.onerror = buildPdf; // fallback if image fails to load
+    logoImg.onerror = buildPdf;
   }
 };

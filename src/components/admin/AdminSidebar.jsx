@@ -6,7 +6,7 @@ import { useAdmin } from '../../context/AdminContext';
 import { HERO_BANNER_PAGES } from '../../utils/heroBannerPages';
 import { 
   LayoutDashboard, Calendar, Users, Settings, LogOut, Image, 
-  HelpCircle, Shield, Bell, ImagePlus, Sparkles, Megaphone, Layers, Star, Briefcase
+  HelpCircle, Shield, Bell, ImagePlus, Sparkles, Megaphone, Layers, Star, Briefcase, Palette
 } from 'lucide-react';
 
 const AdminSidebar = () => {
@@ -33,6 +33,7 @@ const AdminSidebar = () => {
     { path: '/admin/google-reviews', label: 'Google Reviews', icon: <Star className="w-4 h-4" /> },
     { path: '/admin/faq', label: 'Manage FAQ', icon: <HelpCircle className="w-4 h-4" /> },
     { path: '/admin/marketing', label: 'Marketing Options', icon: <Megaphone className="w-4 h-4" /> },
+    { path: '/admin/theme', label: 'Theme & Appearance', icon: <Palette className="w-4 h-4" /> },
   ];
 
   const adminName = adminProfile?.name || 'Administrator';

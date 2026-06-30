@@ -7,7 +7,6 @@ import Card from '../../components/common/Card';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import ImageUploadWithCompressor from '../../components/common/ImageUploadWithCompressor';
-import { useStorage } from '../../hooks/useStorage';
 import toast from 'react-hot-toast';
 import { Megaphone, Save, Trash2, PlusCircle, Sparkles } from 'lucide-react';
 
@@ -32,7 +31,6 @@ const AdminMarketingPage = () => {
     showCredits: true
   });
 
-  const { uploadFileWithProgress, progress, uploading } = useStorage();
 
   // Load configuration details from Firestore
   const loadConfigData = async () => {
@@ -118,17 +116,7 @@ const AdminMarketingPage = () => {
     }));
   };
 
-  const handleFestivalImageUpload = async (blob) => {
-    try {
-      const path = `settings/festival_backdrop_${Date.now()}.jpg`;
-      const downloadUrl = await uploadFileWithProgress(blob, path);
-      setFestivalConfig((prev) => ({ ...prev, imageUrl: downloadUrl }));
-      toast.success('Festival backdrop image uploaded!');
-    } catch (err) {
-      console.error(err);
-      toast.error('Backdrop upload failed.');
-    }
-  };
+
 
   const handleSaveFestival = async (e) => {
     e.preventDefault();
@@ -364,14 +352,12 @@ const AdminMarketingPage = () => {
                         OR Upload Custom image (optimized under 300KB):
                       </span>
                       <ImageUploadWithCompressor
-                        onUploadReady={handleFestivalImageUpload}
-                        multiple={false}
+                        onUploadSuccess={(url) => {
+                          setFestivalConfig((prev) => ({ ...prev, imageUrl: url }));
+                          toast.success('Festival backdrop image uploaded successfully!');
+                        }}
+                        currentImageUrl={festivalConfig.imageUrl}
                       />
-                      {uploading && (
-                        <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden mt-1">
-                          <div className="bg-gold h-full" style={{ width: `${progress}%` }} />
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -394,7 +380,7 @@ const AdminMarketingPage = () => {
             </Card>
 
             <div className="flex justify-end">
-              <Button type="submit" disabled={saving || uploading} className="px-6 py-2.5 text-xs font-semibold flex items-center space-x-2">
+              <Button type="submit" disabled={saving} className="px-6 py-2.5 text-xs font-semibold flex items-center space-x-2">
                 <Save className="w-4 h-4 mr-2" />
                 <span>{saving ? 'Saving...' : 'Save Settings'}</span>
               </Button>

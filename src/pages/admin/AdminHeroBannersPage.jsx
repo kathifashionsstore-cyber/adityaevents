@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import PageTransition from '../../components/common/PageTransition';
 import Spinner from '../../components/common/Spinner';
 import Button from '../../components/common/Button';
-import { useStorage } from '../../hooks/useStorage';
+import ImageUploadWithCompressor from '../../components/common/ImageUploadWithCompressor';
 import {
   createHeroBanner,
   deleteHeroBanner,
@@ -29,6 +29,7 @@ import {
   Trash2,
   UploadCloud,
   X,
+  Loader2,
 } from 'lucide-react';
 
 const sanitizeFileName = (fileName) =>
@@ -50,13 +51,9 @@ const AdminHeroBannersPage = () => {
   const [editingBanner, setEditingBanner] = useState(null);
   const [title, setTitle] = useState('');
   const [isActive, setIsActive] = useState(true);
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [previewUrls, setPreviewUrls] = useState([]);
+  const [uploadedUrls, setUploadedUrls] = useState([]);
   const [saving, setSaving] = useState(false);
   const [draggingId, setDraggingId] = useState(null);
-  const [fileInputKey, setFileInputKey] = useState(0);
-
-  const { uploadFileWithProgress, progress, uploading } = useStorage();
 
   useEffect(() => {
     setLoading(true);
@@ -78,15 +75,6 @@ const AdminHeroBannersPage = () => {
     return unsubscribe;
   }, [selectedPage]);
 
-  useEffect(() => {
-    const urls = selectedFiles.map((file) => URL.createObjectURL(file));
-    setPreviewUrls(urls);
-
-    return () => {
-      urls.forEach((url) => URL.revokeObjectURL(url));
-    };
-  }, [selectedFiles]);
-
   const nextDisplayOrder = useMemo(() => {
     const maxOrder = banners.reduce(
       (max, banner) => Math.max(max, Number(banner.displayOrder) || 0),
@@ -101,8 +89,7 @@ const AdminHeroBannersPage = () => {
     setEditingBanner(null);
     setTitle('');
     setIsActive(true);
-    setSelectedFiles([]);
-    setFileInputKey((key) => key + 1);
+    setUploadedUrls([]);
   };
 
   const openCreateForm = () => {
@@ -114,8 +101,7 @@ const AdminHeroBannersPage = () => {
     setEditingBanner(banner);
     setTitle(banner.title || '');
     setIsActive(banner.isActive !== false);
-    setSelectedFiles([]);
-    setFileInputKey((key) => key + 1);
+    setUploadedUrls(banner.imageUrl ? [banner.imageUrl] : []);
     setFormOpen(true);
   };
 
@@ -127,17 +113,6 @@ const AdminHeroBannersPage = () => {
   const handlePageSelect = (pageKey) => {
     setSearchParams({ page: pageKey });
     closeForm();
-  };
-
-  const handleFileChange = (event) => {
-    const files = Array.from(event.target.files || []);
-    setSelectedFiles(editingBanner ? files.slice(0, 1) : files);
-  };
-
-  const uploadBannerFile = async (file, index = 0) => {
-    const storagePath = `${HERO_BANNER_STORAGE_ROOT}/${selectedPage}/${Date.now()}_${index}_${sanitizeFileName(file.name)}`;
-    const imageUrl = await uploadFileWithProgress(file, storagePath);
-    return { imageUrl, storagePath };
   };
 
   const handleSubmit = async (event) => {
@@ -158,43 +133,41 @@ const AdminHeroBannersPage = () => {
           isActive,
         };
 
-        if (selectedFiles[0]) {
-          const upload = await uploadBannerFile(selectedFiles[0]);
-          updatePayload.imageUrl = upload.imageUrl;
-          updatePayload.storagePath = upload.storagePath;
+        if (uploadedUrls[0]) {
+          updatePayload.imageUrl = uploadedUrls[0];
+          updatePayload.storagePath = '';
         }
 
         await updateHeroBanner(editingBanner.id, updatePayload);
         toast.success('Hero banner updated.');
       } else {
-        if (selectedFiles.length === 0) {
-          toast.error('Choose at least one banner image.');
+        if (uploadedUrls.length === 0) {
+          toast.error('Choose or upload at least one banner image.');
           return;
         }
 
-        for (let index = 0; index < selectedFiles.length; index += 1) {
-          const file = selectedFiles[index];
-          const upload = await uploadBannerFile(file, index);
+        for (let index = 0; index < uploadedUrls.length; index += 1) {
+          const url = uploadedUrls[index];
           const bannerTitle =
-            selectedFiles.length > 1
+            uploadedUrls.length > 1
               ? `${cleanTitle || selectedPageConfig.label} ${index + 1}`
-              : cleanTitle || getTitleFromFile(file.name);
+              : cleanTitle || `${selectedPageConfig.label} Hero`;
 
           await createHeroBanner({
             page: selectedPage,
             title: bannerTitle,
-            imageUrl: upload.imageUrl,
-            storagePath: upload.storagePath,
-            fileName: file.name,
+            imageUrl: url,
+            storagePath: '',
+            fileName: `banner_${index + 1}.webp`,
             isActive,
             displayOrder: nextDisplayOrder + index,
           });
         }
 
         toast.success(
-          selectedFiles.length === 1
+          uploadedUrls.length === 1
             ? 'Hero banner uploaded.'
-            : `${selectedFiles.length} hero banners uploaded.`
+            : `${uploadedUrls.length} hero banners uploaded.`
         );
       }
 
@@ -268,10 +241,10 @@ const AdminHeroBannersPage = () => {
   };
 
   const previewItems =
-    previewUrls.length > 0
-      ? previewUrls.map((url, index) => ({
+    uploadedUrls.length > 0
+      ? uploadedUrls.map((url, index) => ({
           src: url,
-          label: selectedFiles[index]?.name || `Preview ${index + 1}`,
+          label: `Uploaded Image ${index + 1}`,
         }))
       : editingBanner
         ? [{ src: editingBanner.imageUrl, label: editingBanner.title || 'Current banner' }]
@@ -381,27 +354,19 @@ const AdminHeroBannersPage = () => {
                       <label className="font-body text-xs font-semibold tracking-wider text-champagne/80">
                         {editingBanner ? 'Replacement Image' : 'Hero Banner Images'}
                       </label>
-                      <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-gold/25 bg-charcoal/30 px-4 py-6 text-center transition-colors hover:border-gold/60 hover:bg-charcoal/50">
-                        <UploadCloud className="mb-2 h-6 w-6 text-gold" />
-                        <span className="font-body text-xs font-semibold text-champagne">
-                          Choose image{editingBanner ? '' : 's'}
-                        </span>
-                        <span className="mt-1 font-body text-[10px] text-champagne/50">
-                          {editingBanner
-                            ? 'Leave empty to keep the current image.'
-                            : 'Select one or many files. There is no 5 image limit.'}
-                        </span>
-                        <input
-                          key={fileInputKey}
-                          type="file"
-                          accept="image/*"
-                          multiple={!editingBanner}
-                          onChange={handleFileChange}
-                          className="hidden"
-                        />
-                      </label>
+                      <ImageUploadWithCompressor
+                        onUploadSuccess={(urlsOrUrl) => {
+                          if (Array.isArray(urlsOrUrl)) {
+                            setUploadedUrls(urlsOrUrl);
+                          } else {
+                            setUploadedUrls(urlsOrUrl ? [urlsOrUrl] : []);
+                          }
+                        }}
+                        multiple={!editingBanner}
+                        currentImageUrl={editingBanner ? (uploadedUrls[0] || editingBanner.imageUrl) : ''}
+                      />
                     </div>
-
+ 
                     <label className="inline-flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 font-body text-xs text-champagne/75">
                       <input
                         type="checkbox"
@@ -411,24 +376,19 @@ const AdminHeroBannersPage = () => {
                       />
                       Enabled on frontend carousel
                     </label>
-
-                    {(uploading || saving) && (
+ 
+                    {saving && (
                       <div className="rounded-lg border border-white/10 bg-charcoal/40 p-3">
-                        <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
-                          <div
-                            className="h-full bg-gold transition-all"
-                            style={{ width: `${uploading ? progress : 100}%` }}
-                          />
+                        <div className="flex items-center space-x-2 text-gold text-xs font-body font-semibold">
+                          <Loader2 className="w-4 h-4 animate-spin text-gold" />
+                          <span>Saving banner configurations to database...</span>
                         </div>
-                        <p className="mt-2 font-body text-[10px] text-champagne/55">
-                          {uploading ? `Uploading ${progress}%` : 'Saving banner details...'}
-                        </p>
                       </div>
                     )}
-
+ 
                     <Button
                       type="submit"
-                      disabled={saving || uploading}
+                      disabled={saving}
                       className="px-6 py-2.5 text-xs font-semibold"
                     >
                       <Save className="mr-2 h-4 w-4" />

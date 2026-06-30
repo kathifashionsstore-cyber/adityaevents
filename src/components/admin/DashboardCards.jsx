@@ -7,25 +7,25 @@ const DashboardCards = ({ stats }) => {
     {
       title: 'Total Bookings',
       value: stats?.totalBookings || 0,
-      icon: <Calendar className="w-5 h-5 text-gold" />,
+      icon: <Calendar className="w-5 h-5 text-primaryRose" />,
       desc: 'All registered inquiries'
     },
     {
       title: 'Active Bookings',
       value: stats?.activeBookings || 0,
-      icon: <ClipboardCheck className="w-5 h-5 text-gold" />,
+      icon: <ClipboardCheck className="w-5 h-5 text-primaryRose" />,
       desc: 'Confirmed slot listings'
     },
     {
       title: 'Pending Requests',
       value: stats?.pendingBookings || 0,
-      icon: <Clock className="w-5 h-5 text-gold" />,
+      icon: <Clock className="w-5 h-5 text-primaryRose" />,
       desc: 'Slots awaiting review'
     },
     {
       title: 'CRM Lead Enquiries',
       value: stats?.totalLeads || 0,
-      icon: <Users className="w-5 h-5 text-gold" />,
+      icon: <Users className="w-5 h-5 text-primaryRose" />,
       desc: 'Contacts requests archived'
     }
   ];
@@ -35,11 +35,11 @@ const DashboardCards = ({ stats }) => {
       {cards.map((c, i) => (
         <div key={i} className="admin-card-stat p-6 flex items-center justify-between">
           <div className="space-y-1 text-left">
-            <span className="font-body text-[10px] text-champagne/50 uppercase tracking-widest block font-semibold">{c.title}</span>
-            <span className="font-display text-2xl font-extrabold text-champagne block">{c.value}</span>
-            <span className="font-body text-[10px] text-champagne/45 block">{c.desc}</span>
+            <span className="font-body text-[10px] text-textSecondary uppercase tracking-widest block font-bold">{c.title}</span>
+            <span className="font-display text-2xl font-extrabold text-textPrimary block">{c.value}</span>
+            <span className="font-body text-[10px] text-textSecondary/80 block">{c.desc}</span>
           </div>
-          <div className="p-3 bg-white/5 border border-gold/15 rounded-lg shrink-0 ml-4">
+          <div className="p-3 bg-primaryRose/5 border border-primaryRose/20 rounded-lg shrink-0 ml-4">
             {c.icon}
           </div>
         </div>

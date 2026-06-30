@@ -91,7 +91,7 @@ const AdminDashboardPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="font-display text-champagne text-sm font-semibold tracking-wide uppercase">
+              <h3 className="font-display text-primaryRose text-sm font-semibold tracking-wide uppercase">
                 Recent Inquiries
               </h3>
             </div>

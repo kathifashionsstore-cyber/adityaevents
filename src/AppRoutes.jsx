@@ -30,6 +30,7 @@ import AdminEventTypesPage from './pages/admin/AdminEventTypesPage';
 import AdminHeroSliderPage from './pages/admin/AdminHeroSliderPage';
 import AdminGoogleReviewsPage from './pages/admin/AdminGoogleReviewsPage';
 import AdminServicesPage from './pages/admin/AdminServicesPage';
+import AdminThemePage from './pages/admin/AdminThemePage';
 
 const AppRoutes = () => {
   return (
@@ -63,6 +64,7 @@ const AppRoutes = () => {
         <Route path="event-types" element={<AdminEventTypesPage />} />
         <Route path="faq" element={<AdminFAQPage />} />
         <Route path="settings" element={<AdminSettingsPage />} />
+        <Route path="theme" element={<AdminThemePage />} />
         <Route path="notifications" element={<AdminNotificationsPage />} />
       </Route>
 

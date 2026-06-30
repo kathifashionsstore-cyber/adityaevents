@@ -8,23 +8,29 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        primaryRose: 'var(--primary-rose)',
+        secondaryRoseGold: 'var(--secondary-rose-gold)',
+        accentGold: 'var(--accent-gold)',
+        darkSection: 'var(--dark-section)',
+        textPrimary: 'var(--text-primary)',
+        textSecondary: 'var(--text-secondary)',
         gold: {
-          DEFAULT: '#D4AF37',
-          deep: '#B8860B',
-          rich: '#FFD700',
-          champagne: '#F7E7CE',
-          rose: '#E8B4A0',
+          DEFAULT: 'var(--accent-gold)',
+          deep: 'var(--primary-rose)',
+          rich: 'var(--secondary-rose-gold)',
+          champagne: 'var(--secondary-rose-gold)',
+          rose: 'var(--secondary-rose-gold)',
         },
-        burgundy: '#722F37',
-        ivory: '#FFFFF0',
-        success: '#2ECC71',
+        burgundy: 'var(--primary-rose)',
+        ivory: 'var(--background)',
+        success: 'var(--success)',
         danger: '#E74C3C',
-        velvet: '#1C0A2E',       /* Deep Velvet Purple */
-        amethyst: '#2D1B4E',     /* Dark Amethyst */
-        royal: '#3D2464',        /* Royal Purple */
-        cream: '#FFF9F0',        /* Warm Cream */
-        ivoryWarm: '#FDF8F0',    /* Warm Ivory */
-        cardDark: '#3A1F5C',     /* Deep Purple Card */
+        velvet: 'var(--dark-section)',
+        amethyst: 'var(--primary-rose)',
+        royal: 'var(--secondary-rose-gold)',
+        cream: 'var(--background)',
+        ivoryWarm: 'var(--background)',
+        cardDark: 'var(--surface)',
       },
       fontFamily: {
         display: ['"Playfair Display"', 'serif'],

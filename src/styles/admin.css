@@ -5,19 +5,47 @@
   position: fixed;
   left: 0;
   top: 0;
-  background: #111111;
-  border-right: 1px solid rgba(212, 175, 55, 0.15);
+  background: var(--dark-section); /* Premium Rose Gold Dark Section */
+  border-right: 1px solid var(--border-soft);
   color: #ffffff;
   z-index: 100;
   transition: var(--transition);
 }
 
+.admin-sidebar a {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.admin-sidebar a:hover {
+  color: var(--secondary-rose-gold) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.admin-sidebar a.active {
+  background: rgba(199, 109, 122, 0.15) !important;
+  border-color: rgba(199, 109, 122, 0.3) !important;
+  color: var(--secondary-rose-gold) !important;
+  font-weight: 700 !important;
+}
+
+.admin-sidebar button {
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.admin-sidebar button:hover {
+  color: #ef4444 !important;
+  background: rgba(239, 68, 68, 0.05) !important;
+  border-color: rgba(239, 68, 68, 0.2) !important;
+}
+
 .admin-main {
   margin-left: var(--sidebar-width);
   min-height: 100vh;
-  background: var(--bg-primary);
+  background: var(--background); /* Soft Ivory Background */
   transition: var(--transition);
   padding: 2rem;
+  color: var(--text-primary);
 }
 
 @media (max-width: 768px) {
@@ -39,31 +67,31 @@
 }
 
 .admin-table th {
-  background: var(--bg-secondary);
+  background: rgba(199, 109, 122, 0.05);
   color: var(--text-primary);
   text-align: left;
   padding: 1rem;
-  font-weight: 600;
-  border-bottom: 2px solid var(--border-color);
+  font-weight: 650;
+  border-bottom: 2px solid var(--border-soft);
 }
 
 .admin-table td {
   padding: 1rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-soft);
   color: var(--text-secondary);
 }
 
 .admin-table tr:hover {
-  background: rgba(212, 175, 55, 0.04);
+  background: rgba(199, 109, 122, 0.02);
 }
 
 .admin-card-stat {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
   border-radius: var(--border-radius);
   padding: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
 }

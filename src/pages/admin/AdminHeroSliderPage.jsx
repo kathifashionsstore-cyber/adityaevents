@@ -8,9 +8,8 @@ import Spinner from '../../components/common/Spinner';
 import Badge from '../../components/common/Badge';
 import toast from 'react-hot-toast';
 import { subscribeHeroSlides, createHeroSlide, updateHeroSlide, deleteHeroSlide, reorderHeroSlides } from '../../services/heroSlidesService';
-import { uploadFile } from '../../services/storageService';
-import { compressImage } from '../../utils/imageCompressor';
-import { Plus, Trash2, Edit2, MoveUp, MoveDown, ToggleLeft, ToggleRight, X, Image as ImageIcon } from 'lucide-react';
+import ImageUploadWithCompressor from '../../components/common/ImageUploadWithCompressor';
+import { Plus, Trash2, Edit2, MoveUp, MoveDown, ToggleLeft, ToggleRight, X } from 'lucide-react';
 
 const AdminHeroSliderPage = () => {
   const [slides, setSlides] = useState([]);
@@ -26,7 +25,6 @@ const AdminHeroSliderPage = () => {
   const [btnText, setBtnText] = useState('Book Your Event');
   const [btnLink, setBtnLink] = useState('/booking');
   const [isActive, setIsActive] = useState(true);
-  const [selectedFile, setSelectedFile] = useState(null);
   const [currentImageUrl, setCurrentImageUrl] = useState('');
 
   useEffect(() => {
@@ -52,7 +50,6 @@ const AdminHeroSliderPage = () => {
     setBtnText('Book Your Event');
     setBtnLink('/booking');
     setIsActive(true);
-    setSelectedFile(null);
     setCurrentImageUrl('');
     setFormOpen(true);
   };
@@ -65,51 +62,19 @@ const AdminHeroSliderPage = () => {
     setBtnText(slide.btnText || '');
     setBtnLink(slide.btnLink || '');
     setIsActive(slide.isActive !== false);
-    setSelectedFile(null);
     setCurrentImageUrl(slide.imageUrl || '');
     setFormOpen(true);
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // Block files exceeding 3MB
-    if (file.size > 3 * 1024 * 1024) {
-      toast.error('File size exceeds the 3MB limit. Please upload a smaller image.');
-      e.target.value = '';
-      return;
-    }
-    setSelectedFile(file);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedFile && !currentImageUrl) {
+    if (!currentImageUrl) {
       toast.error('Please upload a slide background image.');
       return;
     }
 
     setSaving(true);
-    let imageUrl = currentImageUrl;
-
     try {
-      // 1. Process and upload image if a new one is selected
-      if (selectedFile) {
-        toast.loading('Compressing slide image...', { id: 'slideUpload' });
-        const compressed = await compressImage(selectedFile, 1920, 1080, 0.75);
-        
-        // Final verification that compressed file is under 300KB
-        if (compressed.size > 350 * 1024) {
-          toast.loading('Applying extra compression...', { id: 'slideUpload' });
-          // Force lower quality for large images
-          const extraCompressed = await compressImage(selectedFile, 1600, 900, 0.6);
-          imageUrl = await uploadFile(extraCompressed, `heroSlides/${Date.now()}_${selectedFile.name}`);
-        } else {
-          imageUrl = await uploadFile(compressed, `heroSlides/${Date.now()}_${selectedFile.name}`);
-        }
-      }
-
       const slideData = {
         title,
         subtitle,
@@ -117,7 +82,7 @@ const AdminHeroSliderPage = () => {
         btnText,
         btnLink,
         isActive,
-        imageUrl,
+        imageUrl: currentImageUrl,
         displayOrder: editingId ? (slides.find(s => s.id === editingId)?.displayOrder || 1) : (slides.length + 1)
       };
 
@@ -210,13 +175,18 @@ const AdminHeroSliderPage = () => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  label="Slide Main Title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="e.g. Creating Royal Celebrations"
-                  required
-                />
+                <div>
+                  <Input
+                    label="Slide Main Title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="e.g. We Plan Your | Dream Event | beautifully"
+                    required
+                  />
+                  <span className="text-[10px] text-champagne/40 font-body block mt-1">
+                    Use a pipe (|) character to split title: <strong>Eyebrow | Rose-Gold Accent | Decorative Italic Footer</strong>
+                  </span>
+                </div>
                 <Input
                   label="Subtitle Tag Badge"
                   value={subtitle}
@@ -250,31 +220,18 @@ const AdminHeroSliderPage = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                 {/* Image upload */}
-                <div className="space-y-2">
+                <div className="space-y-2 col-span-1">
                   <span className="font-body text-[10px] text-champagne/50 uppercase tracking-widest block font-semibold">
-                    Background Image (Max 3MB, Compressed to 300KB)
+                    Background Image (WebP Under 500KB Pipeline)
                   </span>
-                  <div className="flex items-center space-x-3">
-                    <label className="flex items-center justify-center border border-white/10 hover:border-gold/30 rounded-lg p-3 bg-white/5 cursor-pointer text-xs text-champagne/80 font-body transition-colors">
-                      <ImageIcon className="w-4 h-4 mr-2 text-gold" />
-                      <span>Upload Image</span>
-                      <input 
-                        type="file" 
-                        accept="image/*" 
-                        onChange={handleFileChange} 
-                        className="hidden" 
-                      />
-                    </label>
-                    {selectedFile && (
-                      <span className="font-mono text-[10px] text-success font-semibold truncate max-w-40">
-                        {selectedFile.name} ({(selectedFile.size / 1024).toFixed(1)} KB)
-                      </span>
-                    )}
-                  </div>
+                  <ImageUploadWithCompressor 
+                    onUploadSuccess={(url) => setCurrentImageUrl(url)}
+                    currentImageUrl={currentImageUrl}
+                  />
                 </div>
 
                 {/* Active toggle */}
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-3 col-span-1">
                   <span className="font-body text-[10px] text-champagne/50 uppercase tracking-widest block font-semibold">
                     Slide Active Status:
                   </span>
@@ -291,19 +248,6 @@ const AdminHeroSliderPage = () => {
                   </button>
                 </div>
               </div>
-
-              {currentImageUrl && (
-                <div className="pt-2">
-                  <span className="font-body text-[10px] text-champagne/50 uppercase tracking-widest block font-semibold mb-2">
-                    Current Loaded Preview:
-                  </span>
-                  <img 
-                    src={currentImageUrl} 
-                    alt="Current preview" 
-                    className="h-28 w-56 rounded-lg object-cover border border-white/10" 
-                  />
-                </div>
-              )}
 
               <div className="flex justify-end space-x-3 pt-4 border-t border-white/5">
                 <Button 

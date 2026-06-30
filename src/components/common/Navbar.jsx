@@ -36,10 +36,10 @@ const Navbar = ({ onMenuToggle, style }) => {
   return (
     <nav
       style={style}
-      className={`fixed top-0 left-0 w-full h-[80px] z-[500] transition-all duration-300 px-6 lg:px-16 flex items-center justify-between ${
+      className={`fixed top-0 left-0 w-full h-[80px] z-[500] transition-all duration-300 px-6 lg:px-16 flex items-center justify-between bg-surface border-b border-primaryRose/15 ${
         scrolled 
-          ? 'bg-velvet/95 backdrop-blur-md shadow-lg border-b border-gold/15' 
-          : 'bg-transparent'
+          ? 'shadow-md bg-surface/95 backdrop-blur-md' 
+          : 'shadow-sm'
       }`}
     >
       {/* Brand Logo */}
@@ -47,13 +47,13 @@ const Navbar = ({ onMenuToggle, style }) => {
         <img 
           src="/logo.webp" 
           alt="Adithya Event Management Logo" 
-          className="h-12 w-12 rounded-full border border-gold/30 object-cover"
+          className="h-12 w-12 rounded-full border border-primaryRose/30 object-cover"
         />
         <div className="flex flex-col">
-          <span className="font-display font-bold text-gold text-lg lg:text-xl tracking-wide leading-none">
+          <span className="font-display font-bold text-textPrimary text-lg lg:text-xl tracking-wide leading-none">
             Adithya Events
           </span>
-          <span className="font-body text-champagne text-[9px] uppercase tracking-[2px] leading-tight opacity-85 mt-0.5">
+          <span className="font-body text-primaryRose text-[9px] uppercase tracking-[2px] leading-tight font-semibold mt-0.5">
             Royal Celebrations
           </span>
         </div>
@@ -65,13 +65,13 @@ const Navbar = ({ onMenuToggle, style }) => {
           <Link
             key={link.path}
             to={link.path}
-            className={`font-body text-sm font-medium tracking-wide transition-colors duration-300 relative py-2 ${
-              isActive(link.path) ? 'text-gold' : 'text-champagne hover:text-gold'
+            className={`font-body text-xs font-bold uppercase tracking-widest transition-colors duration-300 relative py-2 ${
+              isActive(link.path) ? 'text-primaryRose' : 'text-textPrimary hover:text-primaryRose'
             }`}
           >
             {link.label}
             {isActive(link.path) && (
-              <span className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-gold/40 via-gold to-gold/40 rounded-full" />
+              <span className="absolute bottom-0 left-0 w-full h-[2.5px] bg-primaryRose rounded-full" />
             )}
           </Link>
         ))}
@@ -79,9 +79,9 @@ const Navbar = ({ onMenuToggle, style }) => {
         {isAdmin && (
           <Link
             to="/admin/dashboard"
-            className="flex items-center text-rose-gold hover:text-gold font-body text-sm font-medium"
+            className="flex items-center text-primaryRose hover:text-secondaryRoseGold font-body text-xs font-bold uppercase tracking-widest"
           >
-            <Shield className="w-4 h-4 mr-1 text-gold" />
+            <Shield className="w-4 h-4 mr-1 text-primaryRose" />
             Admin
           </Link>
         )}
@@ -93,10 +93,10 @@ const Navbar = ({ onMenuToggle, style }) => {
 
         {/* Notifications Bell */}
         {currentUser && (
-          <Link to={isAdmin ? "/admin/notifications" : "/track-booking"} className="relative text-champagne hover:text-gold transition-colors">
+          <Link to={isAdmin ? "/admin/notifications" : "/track-booking"} className="relative text-textPrimary hover:text-primaryRose transition-colors">
             <Bell className="w-5 h-5" />
             {unreadCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-burgundy border border-gold/30 text-gold font-mono text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-bounce">
+              <span className="absolute -top-2 -right-2 bg-primaryRose border border-white text-white font-mono text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-bounce">
                 {unreadCount}
               </span>
             )}
@@ -105,7 +105,7 @@ const Navbar = ({ onMenuToggle, style }) => {
 
         <Link
           to="/booking"
-          className="hidden sm:inline-flex btn-premium btn-gold text-xs tracking-wider uppercase px-5 py-2.5"
+          className="hidden sm:inline-flex btn-premium btn-gold text-[10px] tracking-widest uppercase px-6 py-3"
         >
           Book Now
         </Link>
@@ -113,7 +113,7 @@ const Navbar = ({ onMenuToggle, style }) => {
         {/* Mobile Hamburguer */}
         <button
           onClick={onMenuToggle}
-          className="md:hidden text-champagne hover:text-gold transition-colors p-1"
+          className="md:hidden text-textPrimary hover:text-primaryRose transition-colors p-1"
         >
           <Menu className="w-6 h-6" />
         </button>

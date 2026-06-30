@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, useLocation } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { ThemeProvider } from './context/ThemeContext';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { NotificationProvider } from './context/NotificationContext';
@@ -66,9 +66,18 @@ const LayoutWrapper = () => {
   );
 };
 
-function App() {
-  const [loading, setLoading] = useState(true);
+const AppContent = () => {
+  const { loadingTheme } = useTheme();
+  const [loadingComplete, setLoadingComplete] = useState(false);
 
+  if (loadingTheme || !loadingComplete) {
+    return <LoadingScreen onComplete={() => setLoadingComplete(true)} />;
+  }
+
+  return <LayoutWrapper />;
+};
+
+function App() {
   return (
     <HelmetProvider>
       <ThemeProvider>
@@ -76,11 +85,7 @@ function App() {
           <NotificationProvider>
             <CartProvider>
               <BrowserRouter>
-                {loading ? (
-                  <LoadingScreen onComplete={() => setLoading(false)} />
-                ) : (
-                  <LayoutWrapper />
-                )}
+                <AppContent />
                 <Toaster position="top-right" reverseOrder={false} />
               </BrowserRouter>
             </CartProvider>

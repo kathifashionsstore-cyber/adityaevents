@@ -2,31 +2,54 @@
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 
-// Helper to draw a vector QR code block synchronously
+// Helper to safely extract live CSS variables from DOM
+const getCSSVarColor = (varName, defaultVal) => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return defaultVal;
+  const value = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  return value || defaultVal;
+};
+
+// Helper to convert hex colors to RGB format arrays
+const hexToRgb = (hex, defaultRgb) => {
+  if (!hex) return defaultRgb;
+  const cleanHex = hex.replace('#', '');
+  if (cleanHex.length === 3) {
+    const r = parseInt(cleanHex[0] + cleanHex[0], 16);
+    const g = parseInt(cleanHex[1] + cleanHex[1], 16);
+    const b = parseInt(cleanHex[2] + cleanHex[2], 16);
+    return [r, g, b];
+  }
+  if (cleanHex.length === 6) {
+    const r = parseInt(cleanHex.substring(0, 2), 16);
+    const g = parseInt(cleanHex.substring(2, 4), 16);
+    const b = parseInt(cleanHex.substring(4, 6), 16);
+    return [r, g, b];
+  }
+  return defaultRgb;
+};
+
+// Mock QR Draw function
 const drawQRVerificationBlock = (doc, x, y, size) => {
-  // Outer frame
-  doc.setDrawColor(45, 27, 78); // Amethyst
-  doc.setLineWidth(0.8);
-  doc.rect(x, y, size, size);
-
-  // Position detection patterns (Top Left, Top Right, Bottom Left)
-  const drawFinderPattern = (px, py) => {
-    doc.setFillColor(45, 27, 78);
-    doc.rect(px, py, 6, 6, 'F');
-    doc.setFillColor(255, 255, 255);
-    doc.rect(px + 1, py + 1, 4, 4, 'F');
-    doc.setFillColor(45, 27, 78);
-    doc.rect(px + 2, py + 2, 2, 2, 'F');
-  };
-
-  drawFinderPattern(x + 1.5, y + 1.5); // Top Left
-  drawFinderPattern(x + size - 7.5, y + 1.5); // Top Right
-  drawFinderPattern(x + 1.5, y + size - 7.5); // Bottom Left
-
-  // Simulated QR data blocks
-  doc.setFillColor(45, 27, 78);
-  doc.rect(x + 9, y + 2, 2, 1, 'F');
-  doc.rect(x + 12, y + 3, 2, 2, 'F');
+  doc.setFillColor(40, 40, 40);
+  doc.rect(x, y, size, size, 'F');
+  doc.setFillColor(255, 255, 255);
+  doc.rect(x + 2, y + 2, size - 4, size - 4, 'F');
+  
+  doc.setFillColor(40, 40, 40);
+  doc.rect(x + 3, y + 3, 5, 5, 'F');
+  doc.rect(x + size - 8, y + 3, 5, 5, 'F');
+  doc.rect(x + 3, y + size - 8, 5, 5, 'F');
+  
+  doc.setFillColor(255, 255, 255);
+  doc.rect(x + 4, y + 4, 3, 3, 'F');
+  doc.rect(x + size - 7, y + 4, 3, 3, 'F');
+  doc.rect(x + 4, y + size - 7, 3, 3, 'F');
+  
+  doc.setFillColor(40, 40, 40);
+  doc.rect(x + 5, y + 5, 1, 1, 'F');
+  doc.rect(x + size - 6, y + 5, 1, 1, 'F');
+  doc.rect(x + 5, y + size - 6, 1, 1, 'F');
+  
   doc.rect(x + 9, y + 6, 4, 1.5, 'F');
   doc.rect(x + 2, y + 9, 3, 2, 'F');
   doc.rect(x + 7, y + 9, 2, 4, 'F');
@@ -38,44 +61,64 @@ const drawQRVerificationBlock = (doc, x, y, size) => {
 };
 
 const drawHeader = (doc, titleText) => {
-  // Draw header block - Deep Amethyst background (#1C0A2E / rgb(28, 10, 46))
-  doc.setFillColor(28, 10, 46);
+  const primaryColorHex = getCSSVarColor('--primary-rose', '#C76D7A');
+  const secondaryColorHex = getCSSVarColor('--secondary-rose-gold', '#EBB4A0');
+  const darkSectionHex = getCSSVarColor('--dark-section', '#3B2F2F');
+  const accentGoldHex = getCSSVarColor('--accent-gold', '#D4AF37');
+
+  const primaryRgb = hexToRgb(primaryColorHex, [199, 109, 122]);
+  const secondaryRgb = hexToRgb(secondaryColorHex, [235, 180, 160]);
+  const darkRgb = hexToRgb(darkSectionHex, [59, 47, 47]);
+  const accentRgb = hexToRgb(accentGoldHex, [212, 175, 55]);
+
+  // Draw header block
+  doc.setFillColor(darkRgb[0], darkRgb[1], darkRgb[2]);
   doc.rect(0, 0, 210, 42, 'F');
 
   // Company Header Text
-  doc.setTextColor(212, 175, 55); // Royal Gold (#D4AF37)
+  doc.setTextColor(accentRgb[0], accentRgb[1], accentRgb[2]);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(18);
   doc.text('ADITHYA EVENT MANAGEMENT', 15, 18);
 
-  doc.setTextColor(247, 231, 206); // Champagne (#F7E7CE)
+  doc.setTextColor(secondaryRgb[0], secondaryRgb[1], secondaryRgb[2]);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8.5);
   doc.text('Premium Royal Events & Catering | Vijayawada, Andhra Pradesh', 15, 26);
   doc.text('Call: +91 93932 17676 | Email: info@adithyaevents.com', 15, 32);
 
-  // Document Title Badge (e.g. CUSTOMER COPY / OFFICE COPY)
-  doc.setFillColor(212, 175, 55);
+  // Document Title Badge
+  doc.setFillColor(primaryRgb[0], primaryRgb[1], primaryRgb[2]);
   doc.rect(145, 12, 50, 8, 'F');
-  doc.setTextColor(28, 10, 46);
+  doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8);
   doc.text(titleText, 170, 17, { align: 'center' });
 
   // Separator line
-  doc.setDrawColor(212, 175, 55); // Gold
+  doc.setDrawColor(accentRgb[0], accentRgb[1], accentRgb[2]);
   doc.setLineWidth(1);
   doc.line(0, 42, 210, 42);
 };
 
 export const generateBookingQuotationPDF = (bookingData) => {
   const doc = new jsPDF();
+
+  const primaryColorHex = getCSSVarColor('--primary-rose', '#C76D7A');
+  const backgroundHex = getCSSVarColor('--background', '#FFFBF7');
+  const darkSectionHex = getCSSVarColor('--dark-section', '#3B2F2F');
+  const textPrimaryHex = getCSSVarColor('--text-primary', '#2D2D2D');
+
+  const primaryRgb = hexToRgb(primaryColorHex, [199, 109, 122]);
+  const backgroundRgb = hexToRgb(backgroundHex, [255, 251, 247]);
+  const darkRgb = hexToRgb(darkSectionHex, [59, 47, 47]);
+  const textPrimaryRgb = hexToRgb(textPrimaryHex, [45, 45, 45]);
   
   // ================= PAGE 1: CUSTOMER COPY =================
   drawHeader(doc, 'CUSTOMER COPY');
 
-  // Quote Metadata
-  doc.setTextColor(28, 10, 46); // Deep Amethyst
+  // Quote Title
+  doc.setTextColor(darkRgb[0], darkRgb[1], darkRgb[2]);
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
   doc.text('OFFICIAL EVENT BOOKING SUMMARY', 15, 54);
@@ -85,12 +128,12 @@ export const generateBookingQuotationPDF = (bookingData) => {
   doc.text(`Date Issued: ${new Date().toLocaleDateString('en-IN')}`, 145, 52);
   doc.text(`Booking ID: ${bookingData.id || 'N/A'}`, 145, 58);
   
-  // Customer Details Box (Warm Cream Background)
-  doc.setFillColor(253, 248, 240); // Warm Ivory (#FDF8F0)
-  doc.setDrawColor(212, 175, 55, 0.4);
+  // Customer Details Box (Cream background)
+  doc.setFillColor(backgroundRgb[0], backgroundRgb[1], backgroundRgb[2]);
+  doc.setDrawColor(primaryRgb[0], primaryRgb[1], primaryRgb[2]);
   doc.rect(15, 64, 180, 36, 'FD');
   
-  doc.setTextColor(28, 10, 46);
+  doc.setTextColor(textPrimaryRgb[0], textPrimaryRgb[1], textPrimaryRgb[2]);
   doc.setFont('helvetica', 'bold');
   doc.text('Client details:', 20, 71);
   doc.setFont('helvetica', 'normal');
@@ -102,7 +145,7 @@ export const generateBookingQuotationPDF = (bookingData) => {
   doc.text(`Event Date: ${bookingData.eventDate}`, 105, 84);
   doc.text(`Venue Name: ${bookingData.venueName || 'To Be Specified'}`, 105, 91);
 
-  // Specifications Table Rows (No Prices!)
+  // Specifications Table Rows
   const tableRows = [
     ['Base Event Package', bookingData.packageName || 'Custom Decoration Package', 'Included in booking'],
     ['Theme Stage Decoration', bookingData.stageDecoration || 'Standard Backdrop theme', 'Included in booking'],
@@ -115,7 +158,7 @@ export const generateBookingQuotationPDF = (bookingData) => {
     startY: 108,
     head: [['Item Description', 'Selected Specifications', 'Commercial Status']],
     body: tableRows,
-    headStyles: { fillColor: [45, 27, 78], textColor: [247, 231, 206], fontStyle: 'bold' },
+    headStyles: { fillColor: primaryRgb, textColor: [255, 255, 255], fontStyle: 'bold' },
     theme: 'striped',
     styles: { fontSize: 8.5, font: 'helvetica' },
   });
@@ -133,7 +176,7 @@ export const generateBookingQuotationPDF = (bookingData) => {
   // Terms and Notes
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8.5);
-  doc.setTextColor(28, 10, 46);
+  doc.setTextColor(darkRgb[0], darkRgb[1], darkRgb[2]);
   doc.text('General Terms & Conditions:', 45, finalY + 2);
   doc.setTextColor(100, 100, 100);
   doc.setFontSize(7.5);
@@ -142,7 +185,7 @@ export const generateBookingQuotationPDF = (bookingData) => {
   doc.text('3. Any additional lighting or sound extensions will link to WhatsApp additions.', 45, finalY + 18);
 
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(212, 175, 55); // Gold
+  doc.setTextColor(primaryRgb[0], primaryRgb[1], primaryRgb[2]);
   doc.setFontSize(9);
   doc.text('Thank you for choosing Adithya Event Management!', 105, finalY + 38, { align: 'center' });
 
@@ -150,13 +193,13 @@ export const generateBookingQuotationPDF = (bookingData) => {
   doc.addPage();
   drawHeader(doc, 'OFFICE COPY');
 
-  doc.setTextColor(28, 10, 46);
+  doc.setTextColor(darkRgb[0], darkRgb[1], darkRgb[2]);
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
   doc.text('INTERNAL OFFICE RECORD & ACCOUNTING LEDGER', 15, 54);
 
   // Client Summary
-  doc.setFillColor(253, 248, 240);
+  doc.setFillColor(backgroundRgb[0], backgroundRgb[1], backgroundRgb[2]);
   doc.rect(15, 64, 180, 32, 'FD');
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'bold');
@@ -166,7 +209,7 @@ export const generateBookingQuotationPDF = (bookingData) => {
   doc.text(`Date: ${bookingData.eventDate} | Venue: ${bookingData.venueName || 'N/A'} | City: ${bookingData.city || 'Vijayawada'}`, 20, 84);
   doc.text(`Category: ${String(bookingData.eventType || '').toUpperCase()} | Decor Tier: ${bookingData.packageName || 'Custom'}`, 20, 90);
 
-  // Specifications
+  // Specifications Checklist
   const officeTableRows = [
     ['Catering Plates', `Veg: ${bookingData.vegGuests || 0} / Non-Veg: ${bookingData.nonVegGuests || 0}`, 'Staff Assignment: ____________'],
     ['Backdrop Decor', bookingData.stageDecoration || 'Standard theme', 'Vendor Blocked: ____________'],
@@ -178,19 +221,19 @@ export const generateBookingQuotationPDF = (bookingData) => {
     startY: 104,
     head: [['Office Checkpoints', 'Specifications Details', 'Status Log Notes']],
     body: officeTableRows,
-    headStyles: { fillColor: [45, 27, 78], textColor: [247, 231, 206], fontStyle: 'bold' },
+    headStyles: { fillColor: primaryRgb, textColor: [255, 255, 255], fontStyle: 'bold' },
     theme: 'grid',
     styles: { fontSize: 8.5, font: 'helvetica' },
   });
 
   finalY = doc.lastAutoTable.finalY + 12;
 
-  // INTERNAL ACCOUNTING FIELDS (Admin budgeting placeholder blocks)
-  doc.setFillColor(253, 248, 240);
-  doc.setDrawColor(28, 10, 46, 0.25);
+  // INTERNAL BUDGETING BLOCKS
+  doc.setFillColor(backgroundRgb[0], backgroundRgb[1], backgroundRgb[2]);
+  doc.setDrawColor(primaryRgb[0], primaryRgb[1], primaryRgb[2]);
   doc.rect(15, finalY, 180, 52, 'FD');
 
-  doc.setTextColor(28, 10, 46);
+  doc.setTextColor(darkRgb[0], darkRgb[1], darkRgb[2]);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(10);
   doc.text('Internal Accounting Log (INR):', 22, finalY + 8);
@@ -204,13 +247,13 @@ export const generateBookingQuotationPDF = (bookingData) => {
   doc.text('5. Labor & Logistics Expense:    __________________', 22, finalY + 40);
   doc.text('6. Net Profit Margin:           __________________', 22, finalY + 46);
 
-  // Signature Block
+  // Approval lines
   doc.setFont('helvetica', 'bold');
   doc.text('Office approvals:', 125, finalY + 16);
   doc.setFont('helvetica', 'normal');
   doc.text('Lead Planner: __________________', 125, finalY + 28);
   doc.text('Director Sign: __________________', 125, finalY + 40);
 
-  // Save the PDF
+  // Save Proposal
   doc.save(`Adithya_Events_Receipt_${bookingData.customerName.replace(/\s+/g, '_')}.pdf`);
 };

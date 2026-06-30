@@ -7,7 +7,6 @@ import Card from '../../components/common/Card';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import ImageUploadWithCompressor from '../../components/common/ImageUploadWithCompressor';
-import { useStorage } from '../../hooks/useStorage';
 import toast from 'react-hot-toast';
 import { Sparkles, Save, UploadCloud } from 'lucide-react';
 
@@ -209,7 +208,6 @@ const AdminEventTypesPage = () => {
     slideshow: ['', '', '']
   });
 
-  const { uploadFileWithProgress, progress, uploading } = useStorage();
 
   // Load event details
   const loadEventDetails = async (slug) => {
@@ -263,19 +261,7 @@ const AdminEventTypesPage = () => {
     });
   };
 
-  // Image compress and upload slot
-  const handleImageUpload = async (blob, slotIndex) => {
-    try {
-      const path = `eventTypes/${selectedSlug}/slideshow_${slotIndex}_${Date.now()}.jpg`;
-      const downloadUrl = await uploadFileWithProgress(blob, path);
-      
-      handleSlideshowChange(slotIndex, downloadUrl);
-      toast.success(`Slot ${slotIndex + 1} image uploaded and updated!`);
-    } catch (err) {
-      console.error(err);
-      toast.error('Upload failed');
-    }
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -402,17 +388,7 @@ const AdminEventTypesPage = () => {
                 <span>Hero Slideshow Images (Max 3, compressed &lt; 300KB)</span>
               </div>
 
-              {uploading && (
-                <div className="space-y-1 animate-pulse">
-                  <div className="flex justify-between text-[10px] text-gold font-body">
-                    <span>Compressing & Uploading image to storage...</span>
-                    <span>{progress}%</span>
-                  </div>
-                  <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden">
-                    <div className="bg-gold h-full transition-all duration-300" style={{ width: `${progress}%` }} />
-                  </div>
-                </div>
-              )}
+
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {formData.slideshow.map((url, index) => (
@@ -438,8 +414,11 @@ const AdminEventTypesPage = () => {
                         OR Upload Custom Image:
                       </span>
                       <ImageUploadWithCompressor
-                        onUploadReady={(blob) => handleImageUpload(blob, index)}
-                        multiple={false}
+                        onUploadSuccess={(url) => {
+                          handleSlideshowChange(index, url);
+                          toast.success(`Slot ${index + 1} image uploaded successfully!`);
+                        }}
+                        currentImageUrl={url}
                       />
                     </div>
                   </div>
@@ -450,7 +429,7 @@ const AdminEventTypesPage = () => {
             <div className="flex justify-end pt-2">
               <Button
                 type="submit"
-                disabled={saving || uploading}
+                disabled={saving}
                 className="px-8 py-3 text-xs uppercase font-bold tracking-widest flex items-center space-x-2"
               >
                 <Save className="w-4 h-4 mr-2" />
