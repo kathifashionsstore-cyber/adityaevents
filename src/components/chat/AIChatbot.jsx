@@ -39,6 +39,11 @@ const AIChatbot = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
+  useEffect(() => {
+    const event = new CustomEvent('chatbot-state-changed', { detail: { isOpen } });
+    window.dispatchEvent(event);
+  }, [isOpen]);
+
   // Local NLP Rules parsing engine
   const parseBotResponse = (userInput) => {
     const text = userInput.toLowerCase();
@@ -133,7 +138,7 @@ const AIChatbot = () => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           style={{ bottom: isMobile ? mobileBottomOffset : desktopBottomOffset }}
-          className="fixed right-6 z-[490] w-[310px] sm:w-[350px] h-[450px] bg-surface border border-border-soft rounded-xl shadow-2xl overflow-hidden flex flex-col"
+          className="fixed right-6 z-[490] w-[310px] sm:w-[350px] h-[450px] bg-surface border border-border-soft rounded-xl shadow-2xl overflow-hidden flex flex-col max-md:left-4 max-md:right-4 max-md:w-auto"
         >
           {/* Header */}
           <div className="bg-darkSection border-b border-border-soft p-4 flex items-center justify-between">

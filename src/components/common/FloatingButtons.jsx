@@ -6,6 +6,7 @@ import { Phone, MessageSquare, ChevronUp } from 'lucide-react';
 const FloatingButtons = () => {
   const [showScroll, setShowScroll] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [chatbotOpen, setChatbotOpen] = useState(false);
 
   useEffect(() => {
     const checkScroll = () => {
@@ -14,14 +15,21 @@ const FloatingButtons = () => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
+    const handleChatbotState = (e) => {
+      if (e.detail) {
+        setChatbotOpen(e.detail.isOpen);
+      }
+    };
     
     handleResize();
     window.addEventListener('scroll', checkScroll);
     window.addEventListener('resize', handleResize);
+    window.addEventListener('chatbot-state-changed', handleChatbotState);
     
     return () => {
       window.removeEventListener('scroll', checkScroll);
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('chatbot-state-changed', handleChatbotState);
     };
   }, []);
 
@@ -89,7 +97,9 @@ const FloatingButtons = () => {
       {/* 2. BOTTOM RIGHT: Vertical Stack (Scroll-to-top, WhatsApp, Call, Chatbot) */}
       <div 
         style={positionStyle}
-        className="fixed right-6 z-[490] flex flex-col space-y-3 items-center select-none"
+        className={`fixed right-6 z-[490] flex flex-col space-y-3 items-center select-none ${
+          isMobile && chatbotOpen ? 'hidden pointer-events-none' : 'flex'
+        }`}
       >
         {/* Scroll To Top */}
         <AnimatePresence>
@@ -99,7 +109,7 @@ const FloatingButtons = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.7, y: 15 }}
               onClick={scrollToTop}
-              className="w-12 h-12 bg-darkSection border border-border-soft text-accentGold rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform cursor-pointer"
+              className="w-14 h-14 md:w-12 md:h-12 bg-darkSection border border-border-soft text-accentGold rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform cursor-pointer"
               title="Scroll to Top"
             >
               <ChevronUp className="w-5 h-5" />
@@ -114,7 +124,7 @@ const FloatingButtons = () => {
             window.open(`https://wa.me/919393217676?text=${encodeURIComponent(welcomeMessage)}`, '_blank');
           }}
           style={{ backgroundColor: '#25D366' }}
-          className="w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform duration-300 cursor-pointer"
+          className="w-14 h-14 md:w-12 md:h-12 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform duration-300 cursor-pointer"
           title="WhatsApp Chat"
         >
           <WhatsAppIcon />
@@ -124,7 +134,7 @@ const FloatingButtons = () => {
         <button
           onClick={() => window.open('tel:+919393217676', '_self')}
           style={{ backgroundColor: '#22C55E' }}
-          className="w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform duration-300 cursor-pointer"
+          className="w-14 h-14 md:w-12 md:h-12 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform duration-300 cursor-pointer"
           title="Call Coordinator"
         >
           <Phone className="w-5 h-5" />
@@ -133,7 +143,7 @@ const FloatingButtons = () => {
         {/* AI Chatbot Assistant */}
         <button
           onClick={triggerChatbot}
-          className="w-12 h-12 rounded-full bg-primaryRose border border-border-soft text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300 cursor-pointer"
+          className="w-14 h-14 md:w-12 md:h-12 rounded-full bg-primaryRose border border-border-soft text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300 cursor-pointer"
           title="AI Assistant"
         >
           <MessageSquare className="w-5 h-5 animate-pulse" />

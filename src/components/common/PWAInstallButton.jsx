@@ -8,8 +8,13 @@ const PWAInstallButton = () => {
   const [showPill, setShowPill] = useState(false);
   const [showIosModal, setShowIosModal] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
     // 1. Detect if iOS
     const userAgent = window.navigator.userAgent || '';
     const iosDetect = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
@@ -43,6 +48,7 @@ const PWAInstallButton = () => {
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('resize', checkMobile);
     };
   }, []);
 
@@ -81,16 +87,16 @@ const PWAInstallButton = () => {
           >
             <div
               onClick={handleInstallClick}
-              className="bg-gradient-to-r from-gold-deep via-gold to-gold-rich text-velvet font-body font-bold text-xs uppercase tracking-widest px-5 py-3 rounded-full flex items-center space-x-2.5 shadow-xl shadow-gold/25 cursor-pointer hover:scale-105 transition-transform"
+              className="bg-gradient-to-r from-gold-deep via-gold to-gold-rich text-velvet font-body font-bold text-[10px] md:text-xs uppercase tracking-widest px-3 py-2 md:px-5 md:py-3 rounded-full flex items-center space-x-1.5 md:space-x-2.5 shadow-xl shadow-gold/25 cursor-pointer hover:scale-105 transition-transform"
             >
-              <Download className="w-4 h-4 text-velvet animate-bounce" />
-              <span>Install Web App</span>
+              <Download className="w-3.5 h-3.5 md:w-4 md:h-4 text-velvet animate-bounce" />
+              <span>{isMobile ? 'Install' : 'Install Web App'}</span>
               <button
                 onClick={handleDismissPill}
-                className="w-5 h-5 rounded-full bg-velvet/15 flex items-center justify-center text-velvet hover:bg-velvet/30 cursor-pointer ml-1"
+                className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-velvet/15 flex items-center justify-center text-velvet hover:bg-velvet/30 cursor-pointer ml-1"
                 aria-label="Close"
               >
-                <X className="w-3 h-3" />
+                <X className="w-2.5 h-2.5 md:w-3 md:h-3" />
               </button>
             </div>
           </motion.div>
